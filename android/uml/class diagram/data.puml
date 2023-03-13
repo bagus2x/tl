@@ -1,0 +1,236 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam dpi 720
+skinparam classAttributeIconSize 0
+left to right direction
+skinparam ranksep 230
+skinparam classFontSize 30
+<style>
+    title {
+        FontSize 30
+    }
+</style>
+package data {
+
+    package remote {
+        class AuthRemoteDataSource {
+            +client: HttpClient
+            +signIn(): AuthDTO
+            +signUp(): AuthDTO
+            +signOut()
+        }
+        class AnnouncementRemoteDataSource {
+            +client: HttpClient
+            +save(): AnnouncementDTO
+            +getAnnouncements(): List<AnnouncementDTO>
+        }
+        class CompetitionRemoteDataSource {
+            +client: HttpClient
+            +save(): AnnouncementDTO
+            +getCompetitions(): List<CompetitionDTO>
+            +getCompetition(): CompetitionDTO
+            +getFavorites(): List<CompetitionDTO>
+            +favorite()
+            +unfavorite()
+        }
+        class InvitationRemoteDataSource {
+            +client: HttpClient
+            +create()
+            +respond()
+            +getInvitation(): InvitationDTO
+        }
+        class MessageRemoteDataSource {
+            +client: HttpClient
+            +sendMessage()
+            +observeNewMessage(): Flow<MessageDTO>
+            +getMessages(): List<MessageDTO>
+            +getLastMessages(): List<MessageDTO>
+        }
+        class NotificationRemoteDataSource {
+            +client: HttpClient
+            +countUnread(): Int
+            +getNotifications(): List<NotificationDTO>
+        }
+        class TestimonyRemoteDataSource {
+            +client: HttpClient
+            +save(): TestimonyDTO
+            +getTestimonies(): List<TestimonyDTO>
+        }
+        class UserRemoteDataSource {
+            +getUser(): UserDTO
+            +getUsers(): List<User>
+            +getFriends(): List<User>
+            +getFavorites(): List<User>
+            +favorite()
+            +unfavorite()
+            +update(): UserDTO
+            +requestFriendship()
+            +acceptFriendship()
+            +cancelFriendship()
+        }
+    }
+
+    package local {
+        class AuthLocalDataSource {
+            +save()
+            +getAuth(): FLow<AuthDTO?>
+            +delete()
+        }
+        class AnnouncementLocalDataSource {
+            +save()
+            +getAnnouncements(): Flow<List<AnnouncementDTO>>
+            +getAnnouncement(): Flow<AnnouncementDTO>
+        }
+        class CompetitionLocalDataSource {
+            +save()
+            +getCompetitions(): Flow<List<CompetitionDTO>>
+            +getCompetition(): Flow<CompetitionDTO>
+        }
+        class MessageLocalDataSource {
+            +save()
+            +getMessages(): Flow<List<MessageDTO>>
+        }
+        class NotificationLocalDataSource {
+            +save()
+            +getNotifications(): Flow<List<NotificationDTO>>
+        }
+        class TestimonyLocalDataSource {
+            +save()
+            +getTestimonies(): Flow<List<TestimonyDTO>>
+        }
+        class UserLocalDataSource {
+            +save()
+            +getUsers(): Flow<List<UserDTO>>
+            +getUser(): Flow<UserDTO>
+        }
+    }
+
+    remote -[hidden]- local
+
+    class AuthRepositoryImpl {
+        +remote: AuthRemoteDataSource
+        +local: AuthLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    AuthRepositoryImpl o--> AuthRemoteDataSource
+    AuthRepositoryImpl o--> AuthLocalDataSource
+
+    class AnnouncementRepositoryImpl {
+        +remote: AnnouncementRemoteDataSource
+        +local: AnnouncementLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    AnnouncementRepositoryImpl o--> AnnouncementRemoteDataSource
+    AnnouncementRepositoryImpl o--> AnnouncementLocalDataSource
+
+    class CompetitionRepositoryImpl {
+        +remote: CompetitionRemoteDataSource
+        +local: CompetitionLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    CompetitionRepositoryImpl o--> CompetitionRemoteDataSource
+    CompetitionRepositoryImpl o--> CompetitionLocalDataSource
+
+    class InvitationRepositoryImpl {
+        +remote: InvitationRemoteDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    InvitationRepositoryImpl o--> InvitationRemoteDataSource
+
+    class NotificationRepositoryImpl {
+        +remote: NotificationRemoteDataSource
+        +local: NotificationLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    NotificationRepositoryImpl o--> NotificationRemoteDataSource
+    NotificationRepositoryImpl o--> NotificationLocalDataSource
+
+    class MessageRepositoryImpl {
+        +remote: MessageRemoteDataSource
+        +local: MessageLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    MessageRepositoryImpl o--> MessageRemoteDataSource
+    MessageRepositoryImpl o--> MessageLocalDataSource
+
+    class TestimonyRepositoryImpl {
+        +remote: TestimonyRemoteDataSource
+        +local: TestimonyLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    TestimonyRepositoryImpl o--> TestimonyRemoteDataSource
+    TestimonyRepositoryImpl o--> TestimonyLocalDataSource
+
+    class UserRepositoryImpl {
+        +remote: UserRemoteDataSource
+        +local: UserLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    UserRepositoryImpl o--> UserRemoteDataSource
+    UserRepositoryImpl o--> UserLocalDataSource
+}
+
+package domain {
+    package repository {
+        interface AuthRepository {
+            +signIn()
+            +signUp()
+            +signOut()
+            +getAuth(): Flow<Auth?>
+        }
+        interface AnnouncementRepository {
+            +save()
+            +getAnnouncements():  Flow<List<Announcement>>
+        }
+        interface CompetitionRepository {
+            +save()
+            +getCompetition(): Flow<Competition?>
+            +getCompetitions(): Flow<List<Competition>>
+            +getFavorites(): List<Competition>
+            +favorite()
+            +unfavorite()
+        }
+        interface InvitationRepository {
+            +invite()
+            +respond()
+            +getInvitation(): Invitation
+        }
+        interface MessageRepository {
+            +send()
+            +getMessages(): Flow<List<Message>>
+            +getLastMessages(): Flow<List<Message>>
+        }
+        interface NotificationRepository {
+            +getNotifications(): Flow<List<Notification>>
+            +countUnread(): Flow<Int>
+        }
+        interface TestimonyRepository {
+            +save()
+            +getTestimonies(): Flow<List<Testimony>>
+        }
+        interface UserRepository {
+            +getUser(): Flow<User?>
+            +getUsers(): Flow<List<User>>
+            +getFriends(): List<User>
+            +update()
+            +requestFriendship()
+            +acceptFriendship()
+            +cancelFriendship()
+            +favorite()
+            +unfavorite()
+            +getFavorites(): List<User>
+        }
+
+        class AuthRepositoryImpl implements AuthRepository
+        class AnnouncementRepositoryImpl implements AnnouncementRepository
+        class CompetitionRepositoryImpl implements CompetitionRepository
+        class InvitationRepositoryImpl implements InvitationRepository
+        class MessageRepositoryImpl implements MessageRepository
+        class NotificationRepositoryImpl implements NotificationRepository
+        class TestimonyRepositoryImpl implements TestimonyRepository
+        class UserRepositoryImpl implements UserRepository
+    }
+}
+
+@enduml

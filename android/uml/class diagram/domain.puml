@@ -1,0 +1,315 @@
+@startuml
+skinparam dpi 490
+skinparam classAttributeIconSize 0
+left to right direction
+'skinparam nodesep 100
+skinparam ranksep 420
+
+package domain {
+    package models {
+        class Auth {
+            +userId: Long
+            +accessToken: String
+            +refreshToken: String
+        }
+        class Announcement {
+            +id: Long
+            +authorId: Long
+            +description: String
+            +file: String?
+            +createdAt: Date
+        }
+        class Competition {
+            +id: Long
+            +poster: String
+            +title: String
+            +description: String
+            +theme: String
+            +city: String
+            +country: String
+            +deadline: Date
+            +minimumFee: Long
+            +maximumFee: Long
+            +category: String
+            +organizer: String
+            +organizerName: String
+            +createdAt: Date
+        }
+        class Invitation {
+            +id: Long
+            +inviterId: Long
+            +inviteeId: Long
+            +description: String
+            +response: String
+            +status: String
+            +file: String?
+            +createdAt: Date
+        }
+       class Message {
+            +id: Long
+            +senderId: Long
+            +receiverId: Long
+            +description: String
+            +file: String?
+            +updatedAt: Date
+            +createdAt: Date
+        }
+        class Notification {
+            +id: Long
+            +userId: Long
+            +dataId: Long?
+            +title: String
+            +subtitle1: String?
+            +subtitle2: String?
+            +photo: String?
+            +description: String?
+            +createdAt: Date
+        }
+        class Testimony {
+            +id: Long
+            +senderId: Long
+            +receiverId: Long
+            +description: String
+            +updatedAt: Date
+            +createdAt: Date
+        }
+        class User {
+            +id: Long
+            +name: String
+            +email: String
+            +photo: String?
+            +university: String?
+            +department: String?
+            +stream: String?
+            +year: Int?
+            +gender: String?
+            +age: Int?
+            +bio: String?
+            +achievements: List<String>
+            +certifications: List<String>
+            +invitable: Boolean
+            +status: String?
+            +createdAt: Date
+        }
+    }
+    package repository {
+        interface AuthRepository {
+            +signIn()
+            +signUp()
+            +signOut()
+            +getAuth(): Flow<Auth?>
+        }
+        AuthRepository ..> Auth
+
+        interface AnnouncementRepository {
+            +save()
+            +getAnnouncements():  Flow<List<Announcement>>
+        }
+        AnnouncementRepository ..> Announcement
+
+        interface CompetitionRepository {
+            +save()
+            +getCompetition(): Flow<Competition?>
+            +getCompetitions(): Flow<List<Competition>>
+            +getFavorites(): List<Competition>
+            +favorite()
+            +unfavorite()
+        }
+        CompetitionRepository ..> Competition
+
+        interface InvitationRepository {
+            +invite()
+            +respond()
+            +getInvitation(): Invitation
+        }
+        InvitationRepository ..> Invitation
+
+        interface MessageRepository {
+            +send()
+            +getMessages(): Flow<List<Message>>
+            +getLastMessages(): Flow<List<Message>>
+        }
+        MessageRepository ..> Message
+
+        interface NotificationRepository {
+            +getNotifications(): Flow<List<Notification>>
+            +countUnread(): Flow<Int>
+        }
+        NotificationRepository ..> Notification
+
+        interface TestimonyRepository {
+            +save()
+            +getTestimonies(): Flow<List<Testimony>>
+        }
+        TestimonyRepository ..> Testimony
+
+        interface UserRepository {
+            +getUser(): Flow<User?>
+            +getUsers(): Flow<List<User>>
+            +getFriends(): List<User>
+            +update()
+            +requestFriendship()
+            +acceptFriendship()
+            +cancelFriendship()
+            +favorite()
+            +unfavorite()
+            +getFavorites(): List<User>
+        }
+        UserRepository ..> User
+    }
+    package usecase {
+'       Auth Use Case
+        class SignInUseCase {
+            +authRepository: AuthRepository
+            +invoke()
+        }
+        class SignUpUseCase {
+            +authRepository: AuthRepository
+            +invoke()
+        }
+        class SignOutUseCase {
+            +authRepository: AuthRepository
+            +invoke()
+        }
+        class GetAuthUseCase {
+            +authRepository: AuthRepository
+            +invoke(): Flow<Auth?>
+        }
+        SignInUseCase o-- AuthRepository
+        SignUpUseCase o-- AuthRepository
+        SignOutUseCase o-- AuthRepository
+        GetAuthUseCase o-- AuthRepository
+
+'        Announcement Use Case
+        class AddAnnouncementUseCase {
+            +announcementRepository: AnnouncementRepository
+            +invoke()
+        }
+        class GetAnnouncementsUseCase {
+            +announcementRepository: AnnouncementRepository
+            +userRepository: UserRepository
+            +invoke(): List<Pair<Announcement, User>>
+        }
+        AddAnnouncementUseCase o-- AnnouncementRepository
+        GetAnnouncementsUseCase o-- AnnouncementRepository
+        GetAnnouncementsUseCase o-- UserRepository
+
+'        Competition Use Case
+        class PublishCompetitionUseCase {
+            +competitionRepository: CompetitionRepository
+            +invoke()
+        }
+        class GetCompetitionUseCase {
+            +competitionRepository: CompetitionRepository
+            +invoke(): Flow<Competition?>
+        }
+        class GetCompetitionsUseCase {
+            +competitionRepository: CompetitionRepository
+            +invoke(): Flow<List<Competition>>
+        }
+        class GetFavCompetitionsUseCase {
+            +competitionRepository: CompetitionRepository
+            +invoke(): Flow<List<Competition>>
+        }
+        class FavCompetitionUseCase {
+            +competitionRepository: CompetitionRepository
+            +invoke()
+        }
+        PublishCompetitionUseCase o-- CompetitionRepository
+        GetCompetitionUseCase o-- CompetitionRepository
+        GetCompetitionsUseCase o-- CompetitionRepository
+        GetFavCompetitionsUseCase o-- CompetitionRepository
+        FavCompetitionUseCase o-- CompetitionRepository
+
+'        Invitation
+        class CreateInvitationUseCase {
+            +invitationRepository: InvitationRepository
+            +invoke()
+        }
+        class RespondInvitationUseCase {
+            +invitationRepository: InvitationRepository
+            +invoke()
+        }
+        class GetInvitationUseCase {
+            +invitationRepository: InvitationRepository
+            +userRepository: UserRepository
+            +invoke(): Flow<Triple<Invitation, User, User>>
+        }
+        CreateInvitationUseCase o-- InvitationRepository
+        RespondInvitationUseCase o-- InvitationRepository
+        GetInvitationUseCase o-- InvitationRepository
+        GetInvitationUseCase o-- UserRepository
+
+'        Message
+        class SendMessageUseCase {
+            +messageRepository: MessageRepository
+            +invoke()
+        }
+        class GetMessagesUseCase {
+            +messageRepository: MessageRepository
+            +invoke()
+        }
+        class GetLastMessagesUseCase {
+            +messageRepository: MessageRepository
+            +userRepository: UserRepository
+            +invoke()
+        }
+        SendMessageUseCase o-- MessageRepository
+        GetMessagesUseCase o-- MessageRepository
+        GetLastMessagesUseCase o-- MessageRepository
+        GetLastMessagesUseCase o-- UserRepository
+
+'        Notification
+        class GetNotificationUseCase {
+            +notificationRepository: NotificationRepository
+            +unread: Flow<Int>
+            +invoke(): Flow<List<Notification>>
+        }
+        GetNotificationUseCase o-- NotificationRepository
+
+'        Testimony
+        class AddTestimonyUseCase {
+            +testimonyRepository: TestimonyRepository
+            +invoke()
+        }
+        class GetTestimoniesUseCase {
+            +testimonyRepository: TestimonyRepository
+            +invoke()
+        }
+        AddTestimonyUseCase o-- TestimonyRepository
+        GetTestimoniesUseCase o-- TestimonyRepository
+
+'        User
+        class EditProfileUseCase {
+            +userRepository: UserRepository
+            +invoke()
+        }
+        class FriendUseCase {
+            +userRepository: UserRepository
+            +invoke()
+        }
+        class GetUserUseCase {
+            +userRepository: UserRepository
+            +invoke(): Flow<User?>
+        }
+        class GetUsersUseCase {
+            +userRepository: UserRepository
+            +invoke(): FLow<List<User>>
+        }
+        class GetFriendsUseCase {
+            +userRepository: UserRepository
+            +invoke(): FLow<List<User>>
+        }
+        class GetFavUsersUseCase {
+            +userRepository: UserRepository
+            +invoke(): FLow<List<User>>
+        }
+        EditProfileUseCase o-- UserRepository
+        FriendUseCase o-- UserRepository
+        GetUserUseCase o-- UserRepository
+        GetUsersUseCase o-- UserRepository
+        GetFriendsUseCase o-- UserRepository
+        GetFavUsersUseCase o-- UserRepository
+    }
+}
+@enduml

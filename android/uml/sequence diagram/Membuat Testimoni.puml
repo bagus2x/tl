@@ -1,0 +1,77 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User  -> TestimonyFormScreen : TestimonyFormScreen()
+activate TestimonyFormScreen
+
+User -> TestimonyFormScreen: onChange()
+
+TestimonyFormScreen -> TestimonyFormViewModel: setDescription()
+activate TestimonyFormViewModel
+
+TestimonyFormScreen -> TestimonyFormViewModel: setRating()
+
+User -> TestimonyFormScreen: onClick()
+deactivate User
+
+TestimonyFormScreen -> TestimonyFormViewModel: send()
+
+TestimonyFormViewModel -> AddTestimonyUseCase: invoke()
+activate AddTestimonyUseCase
+
+AddTestimonyUseCase -> AddTestimonyUseCase: validate()
+activate AddTestimonyUseCase
+deactivate AddTestimonyUseCase
+
+alt validation success
+    AddTestimonyUseCase -> TestimonyRepository: save()
+    activate TestimonyRepository
+
+    alt network call success
+        TestimonyRepository -> TestimonyRemoteDataSource: save()
+        activate TestimonyRemoteDataSource
+
+        TestimonyRemoteDataSource -> HttpClient: patch()
+        activate HttpClient
+
+        HttpClient -> TestimonyDTO: << create >>
+        activate TestimonyDTO
+        TestimonyDTO --> HttpClient
+        deactivate TestimonyDTO
+
+        HttpClient --> TestimonyRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        TestimonyRemoteDataSource --> TestimonyRepository: response from server
+        deactivate TestimonyRemoteDataSource
+
+        TestimonyRepository -> TestimonyLocalDataSource: save()
+        activate TestimonyLocalDataSource
+
+        TestimonyLocalDataSource -> Database
+        activate Database
+        deactivate Database
+        deactivate TestimonyLocalDataSource
+    else failure
+        TestimonyRepository --> AddTestimonyUseCase: exception
+        deactivate TestimonyRepository
+
+        AddTestimonyUseCase --> TestimonyFormViewModel: exception
+
+        TestimonyFormViewModel -> TestimonyFormScreen: showSnackbar()
+    end
+else failure
+    AddTestimonyUseCase --> TestimonyFormViewModel: exception
+    deactivate AddTestimonyUseCase
+
+    TestimonyFormViewModel -> TestimonyFormScreen: showSnackbar()
+end
+@enduml

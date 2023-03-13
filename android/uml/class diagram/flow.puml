@@ -1,0 +1,25 @@
+@startuml
+
+skinparam dpi 720
+folder Presentation {
+    card Screen
+    card ViewModel
+
+    Screen -right-> ViewModel
+    Screen <-right- ViewModel
+}
+
+
+folder Domain {
+    card UseCase
+}
+
+folder Data {
+    card RepositoryImpl
+    card DataSource
+
+     RepositoryImpl -right-> DataSource
+     RepositoryImpl <-right- DataSource
+}
+
+@enduml

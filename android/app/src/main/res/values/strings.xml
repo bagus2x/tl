@@ -1,0 +1,152 @@
+<resources>
+    <string name="app_name">Teman Lomba</string>
+    <string name="text_chat">Chat</string>
+    <string name="cd_search">Search</string>
+    <string name="cd_add">Add</string>
+    <string name="text_personal_data">Data Diri</string>
+    <string name="text_testimony">Testimoni</string>
+    <string name="text_post">Post</string>
+    <string name="text_users">Pengguna</string>
+    <string name="cd_search_users">Search users</string>
+    <string name="cd_favorite_users">Favorite</string>
+    <string name="cd_notifications">Notifications</string>
+    <string name="text_competition">Lomba</string>
+    <string name="cd_search_competition">Search</string>
+    <string name="cd_favorites_competition">Favorite</string>
+    <string name="text_government">Pemerintahan</string>
+    <string name="text_company">Perusahaan</string>
+    <string name="text_university">Universitas</string>
+    <string name="text_national">Nasional</string>
+    <string name="text_international">Internasional</string>
+    <string name="text_competition_poster">Poster Lomba</string>
+    <string name="text_competition_level">Kategori Tingkatan Lomba</string>
+    <string name="text_organizer">Kategori Pembuat Lomba</string>
+    <string name="text_organizer_name">Penyelenggara Lomba</string>
+    <string name="text_theme">Tema</string>
+    <string name="text_title">Judul</string>
+    <string name="text_description">Deskripsi</string>
+    <string name="text_location">Lokasi</string>
+    <string name="text_city">Kota</string>
+    <string name="text_country">Negara</string>
+    <string name="text_dealine_submit">Tenggat Pendaftaran</string>
+    <string name="text_registration_fee">Biaya Pendaftaran</string>
+    <string name="text_fee_min">Min</string>
+    <string name="text_fee_max">Max</string>
+    <string name="cd_add_announcement">Add announcement</string>
+    <string name="text_add_announcement">Buat Pengumuman</string>
+    <string name="text_competition_detail">Detail Lomba</string>
+    <string name="text_competition_description">Deskripsi Lomba</string>
+    <string name="text_apply">Ajukan Diri</string>
+    <string name="text_edit_profile">Sunting Profil</string>
+    <string name="text_signout">Keluar</string>
+    <string name="text_home">Home</string>
+    <string name="text_profile">Profil</string>
+    <string name="text_save">Simpan</string>
+    <string name="text_username">Nama Pengguna</string>
+    <string name="text_friendship_requested">Mengajak kamu berteman</string>
+    <string name="text_friendship_accepted">Menerima permintaan pertemanan kamu</string>
+    <string name="text_invitation_accepted">Menerima ajakan kamu bergabung ke tim lombanya</string>
+    <string name="text_invitation_requested">Mengajak kamu bergabung ke tim lombanya</string>
+    <string name="text_invitation_declined">Menolak ajakan kamu bergabung ke tim lombanya</string>
+    <string name="text_invite">Ajak</string>
+    <string name="text_request_friendship">Tambah Teman</string>
+    <string name="text_requested">Diminta</string>
+    <string name="text_friend">Teman</string>
+    <string name="text_dialog_friendship_response">Terima permintaan pertemanan dari %1$s?</string>
+    <string name="text_dialog_invitation_response">Bagaimana respons kamu terhadap ajakan %1$s?</string>
+    <string name="text_decline">Tolak</string>
+    <string name="text_accept">Terima</string>
+    <string name="text_invitation">Tawaran Ajakan</string>
+    <string name="text_respond">Respons</string>
+    <string name="text_invitation_form">Form Ajakan</string>
+    <string name="text_send">Kirim</string>
+    <string name="text_response_form">Form Balasan</string>
+    <string name="text_batch">Angkatan</string>
+    <string name="text_batch_asc">Angkatan Awal</string>
+    <string name="text_batch_desc">Angkatan Akhir</string>
+    <string name="text_department">Departemen</string>
+    <string name="text_study_program">Program Studi</string>
+    <string name="text_stream">Stream</string>
+    <string name="text_academic">Akademik</string>
+    <string name="text_email">Email</string>
+    <string name="text_password">Password</string>
+    <string name="text_no_account">Belum memiliki akun? Daftar</string>
+    <string name="text_sign_in">Masuk</string>
+    <string name="text_sign_in_sign_up">Mulailah miliki tim lomba yang kamu dambakan</string>
+    <string name="text_name">Nama</string>
+    <string name="text_name_asc">Nama Paling Awal</string>
+    <string name="text_name_desc">Nama Paling Akhir</string>
+    <string name="text_title_asc">Judul Paling Awal</string>
+    <string name="text_title_desc">Judul Paling Akhir</string>
+    <string name="text_fee_asc">Biaya Terendah</string>
+    <string name="text_fee_desc">Biaya Tertinggi</string>
+    <string name="text_sign_up">Daftar</string>
+    <string name="text_have_account">Sudah memiliki akun? Masuk</string>
+    <string name="text_notification">Notifikasi</string>
+    <string name="text_bio">Bio</string>
+    <string name="text_accep_invitation">Menerima ajakan bergabung dengan tim lomba</string>
+    <string name="text_male">Pria</string>
+    <string name="text_female">Wanita</string>
+    <string name="text_age">Umur</string>
+    <string name="text_contact">Kontak</string>
+    <string name="text_form">Form</string>
+    <string name="text_publish">Publish</string>
+    <string name="text_like">Like</string>
+    <string name="text_link">Link</string>
+    <string name="text_response">Respons</string>
+    <string name="text_certifications">Sertifikasi</string>
+    <string name="text_achievements">Penghargaan</string>
+    <string name="text_search">Search…</string>
+    <string name="text_profile_saved">Profil kamu berhasil diperbarui</string>
+    <string name="text_response_sent">Selamat!! Jawaban kamu telah berhasil disampaikan</string>
+    <string name="text_invitation_sent">AJakan kamu telah berhasil disampaikan</string>
+    <string name="text_testimony_sent">Testimony telah berhasil dikirim</string>
+    <string name="text_years_old">%1$d Tahun</string>
+    <string name="text_submit">Submit</string>
+    <string name="text_verification_code_sent">Kode verifikasi telah dikirim ke email kamu</string>
+    <string name="text_input_4_digit_code">Masukkan kode 4 digit tersebut</string>
+    <string name="text_see_more">lebih banyak</string>
+    <string name="text_see_less">\n\nlebih sedikit</string>
+    <string name="text_skills">Skills</string>
+    <string name="text_faculty">Fakultas</string>
+    <string name="text_gender">Jenis Kelamin</string>
+    <string name="text_message_you">Anda: %1$s</string>
+    <string-array name="text_competition_theme_list">
+        <item>IT</item>
+        <item>Bisnis</item>
+        <item>UI and UX</item>
+        <item>Software Development</item>
+    </string-array>
+    <string-array name="text_stream_list">
+        <item>Pengembangan Full Stack</item>
+        <item>Interactive Media</item>
+        <item>Rekayasa Jaringan dan Komputasi Awan</item>
+        <item>Keamanan Siber</item>
+        <item>Komputasi Cerdas</item>
+        <item>Sains Data</item>
+    </string-array>
+    <string-array name="text_study_program_list">
+        <item>Teknik Informatika</item>
+        <item>Teknik Komputer</item>
+        <item>Sistem Informasi</item>
+        <item>Teknologi Informasi</item>
+        <item>Pendidikan Teknologi Informasi</item>
+    </string-array>
+    <string-array name="text_batch_list">
+        <item>2017</item>
+        <item>2018</item>
+        <item>2019</item>
+        <item>2020</item>
+        <item>2021</item>
+        <item>2022</item>
+    </string-array>
+    <string-array name="text_category_list">
+        <item>@string/text_national</item>
+        <item>@string/text_international</item>
+    </string-array>
+    <string-array name="text_organizer_list">
+        <item>@string/text_government</item>
+        <item>@string/text_university</item>
+        <item>@string/text_company</item>
+    </string-array>
+</resources>

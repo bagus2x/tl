@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+autonumber
+
+actor User as u1
+u1 -> NotificationListScreen: NotificationListScreen()
+activate NotificationListScreen
+
+NotificationListScreen -> NotificationListViewModel: uiState
+activate NotificationListViewModel
+
+NotificationListViewModel -> GetNotificationUseCase: invoke()
+activate GetNotificationUseCase
+
+GetNotificationUseCase -> NotificationRepository: getNotification()
+activate NotificationRepository
+
+alt found
+    NotificationRepository -> NotificationLocalDataSource: getNotification
+    activate NotificationLocalDataSource
+
+    NotificationLocalDataSource -> Database
+    activate Database
+
+    Database -> NotificationEntity: << create >>
+    activate NotificationEntity
+
+    NotificationEntity --> Database
+    deactivate NotificationEntity
+
+    Database --> NotificationLocalDataSource
+    deactivate Database
+
+    NotificationLocalDataSource --> NotificationRepository
+    deactivate NotificationLocalDataSource
+else not found
+    NotificationRepository -> NotificationRemoteDataSource: getNotification()
+    activate NotificationRemoteDataSource
+
+    NotificationRemoteDataSource -> HttpClient: get()
+    activate HttpClient
+
+    HttpClient -> NotificationResponse: << create >>
+    activate NotificationResponse
+
+    NotificationResponse --> HttpClient
+    deactivate NotificationResponse
+
+    HttpClient --> NotificationRemoteDataSource: response\nfrom server
+    deactivate HttpClient
+
+    NotificationRemoteDataSource --> NotificationRepository
+    deactivate NotificationRemoteDataSource
+end
+
+NotificationRepository -> Notification: << create >>
+activate Notification
+
+Notification --> NotificationRepository
+deactivate Notification
+
+NotificationRepository --> GetNotificationUseCase
+deactivate NotificationRepository
+
+GetNotificationUseCase --> NotificationListViewModel
+deactivate GetNotificationUseCase
+
+NotificationListViewModel -> NotificationListScreen: display
+
+@enduml

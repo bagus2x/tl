@@ -1,0 +1,59 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+hide footbox
+skinparam DefaultFontSize 24
+
+actor User
+activate User
+User  -> CompetitionDetailScreen : CompetitionDetailScreen()
+activate CompetitionDetailScreen
+
+User -> CompetitionDetailScreen: onClick()
+deactivate User
+
+CompetitionDetailScreen -> CompetitionDetailViewModel: favorite()
+activate CompetitionDetailViewModel
+
+CompetitionDetailViewModel -> FavoriteCompetitionUseCase: invoke()
+activate FavoriteCompetitionUseCase
+
+FavoriteCompetitionUseCase -> CompetitionRepository: favorite()
+activate CompetitionRepository
+
+alt network call success
+    CompetitionRepository -> CompetitionRemoteDataSource: favorite()
+    activate CompetitionRemoteDataSource
+
+    CompetitionRemoteDataSource -> HttpClient: patch()
+    activate HttpClient
+
+    HttpClient -> CompetitionDTO: << create >>
+    activate CompetitionDTO
+    CompetitionDTO --> HttpClient
+    deactivate CompetitionDTO
+
+    HttpClient --> CompetitionRemoteDataSource: response from server
+
+    deactivate HttpClient
+
+    CompetitionRemoteDataSource --> CompetitionRepository: response from server
+    deactivate CompetitionRemoteDataSource
+
+    CompetitionRepository -> CompetitionLocalDataSource: save()
+    activate CompetitionLocalDataSource
+
+    CompetitionLocalDataSource -> Database: save()
+    activate Database
+    deactivate Database
+    deactivate CompetitionLocalDataSource
+else failure
+    CompetitionRepository --> FavoriteCompetitionUseCase: exception
+    deactivate CompetitionRepository
+
+    FavoriteCompetitionUseCase --> CompetitionDetailViewModel: exception
+
+    CompetitionDetailViewModel -> CompetitionDetailScreen: showSnackbar()
+end
+@enduml

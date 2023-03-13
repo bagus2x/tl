@@ -1,0 +1,109 @@
+@startuml
+skinparam dpi 720
+skinparam classAttributeIconSize 0
+left to right direction
+'skinparam nodesep 100
+skinparam ranksep 400
+package domain {
+    package models {
+        class Auth
+        class Announcement
+        class Competition
+        class Invitation
+        class Message
+        class Notification
+        class Testimony
+        class User
+    }
+    package repository {
+        interface AuthRepository
+        interface AnnouncementRepository
+        interface CompetitionRepository
+        interface InvitationRepository
+        interface MessageRepository
+        interface NotificationRepository
+        interface TestimonyRepository
+        interface UserRepository
+
+        AuthRepository .. Auth
+        UserRepository .. User
+        CompetitionRepository .. Competition
+        AnnouncementRepository .. Announcement
+        NotificationRepository .. Notification
+        MessageRepository .. Message
+        TestimonyRepository .. Testimony
+    }
+    package usecase {
+'       Auth Use Case
+        class SignInUseCase
+        class SignUpUseCase
+        class SignOutUseCase
+        class GetAuthUseCase
+        SignInUseCase o-- AuthRepository
+        SignUpUseCase o-- AuthRepository
+        SignOutUseCase o-- AuthRepository
+        GetAuthUseCase o-- AuthRepository
+
+'        Announcement Use Case
+        class AddAnnouncementUseCase
+        class GetAnnouncementsUseCase
+        AddAnnouncementUseCase o-- AnnouncementRepository
+        GetAnnouncementsUseCase o-- AnnouncementRepository
+        GetAnnouncementsUseCase o-- UserRepository
+
+'        Competition Use Case
+        class PublishCompetitionUseCase
+        class GetCompetitionUseCase
+        class GetCompetitionsUseCase
+        class GetFavCompetitionsUseCase
+        class FavCompetitionUseCase
+        PublishCompetitionUseCase o-- CompetitionRepository
+        GetCompetitionUseCase o-- CompetitionRepository
+        GetCompetitionsUseCase o-- CompetitionRepository
+        GetFavCompetitionsUseCase o-- CompetitionRepository
+        FavCompetitionUseCase o-- CompetitionRepository
+
+'        Invitation
+        class CreateInvitationUseCase
+        class RespondInvitationUseCase
+        class GetInvitationUseCase
+        CreateInvitationUseCase o-- InvitationRepository
+        RespondInvitationUseCase o-- InvitationRepository
+        GetInvitationUseCase o-- InvitationRepository
+        GetInvitationUseCase o-- UserRepository
+
+'        Message
+        class SendMessageUseCase
+        class GetMessagesUseCase
+        class GetLastMessagesUseCase
+        SendMessageUseCase o-- MessageRepository
+        GetMessagesUseCase o-- MessageRepository
+        GetLastMessagesUseCase o-- MessageRepository
+        GetLastMessagesUseCase o-- UserRepository
+
+'        Notification
+        class GetNotificationUseCase
+        GetNotificationUseCase o-- NotificationRepository
+
+'        Testimony
+        class AddTestimonyUseCase
+        class GetTestimoniesUseCase
+        AddTestimonyUseCase o-- TestimonyRepository
+        GetTestimoniesUseCase o-- TestimonyRepository
+
+'        User
+        class EditProfileUseCase
+        class FriendUseCase
+        class GetUserUseCase
+        class GetUsersUseCase
+        class GetFriendsUseCase
+        class GetFavUsersUseCase
+        EditProfileUseCase o-- UserRepository
+        FriendUseCase o-- UserRepository
+        GetUserUseCase o-- UserRepository
+        GetUsersUseCase o-- UserRepository
+        GetFriendsUseCase o-- UserRepository
+        GetFavUsersUseCase o-- UserRepository
+    }
+}
+@enduml

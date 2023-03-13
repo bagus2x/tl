@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+autonumber
+
+actor User as u1
+u1 -> HomeScreen: HomeScreen()
+activate HomeScreen
+
+HomeScreen -> HomeViewModel: uiState
+activate HomeViewModel
+
+HomeViewModel -> GetAnnouncementsUseCase: invoke()
+activate GetAnnouncementsUseCase
+
+GetAnnouncementsUseCase -> AnnouncementRepository: getAnnouncements()
+activate AnnouncementRepository
+
+alt found
+    AnnouncementRepository -> AnnouncementLocalDataSource: getAnnouncements
+    activate AnnouncementLocalDataSource
+
+    AnnouncementLocalDataSource -> Database
+    activate Database
+
+    Database -> AnnouncementEntity: << create >>
+    activate AnnouncementEntity
+
+    AnnouncementEntity --> Database
+    deactivate AnnouncementEntity
+
+    Database --> AnnouncementLocalDataSource
+    deactivate Database
+
+    AnnouncementLocalDataSource --> AnnouncementRepository
+    deactivate AnnouncementLocalDataSource
+else not found
+    AnnouncementRepository -> AnnouncementRemoteDataSource: getAnnouncements()
+    activate AnnouncementRemoteDataSource
+
+    AnnouncementRemoteDataSource -> HttpClient: get()
+    activate HttpClient
+
+    HttpClient -> AnnouncementResponse: << create >>
+    activate AnnouncementResponse
+
+    AnnouncementResponse --> HttpClient
+    deactivate AnnouncementResponse
+
+    HttpClient --> AnnouncementRemoteDataSource: response\nfrom server
+    deactivate HttpClient
+
+    AnnouncementRemoteDataSource --> AnnouncementRepository
+    deactivate AnnouncementRemoteDataSource
+end
+
+AnnouncementRepository -> User: << create >>
+activate User
+
+User --> AnnouncementRepository
+deactivate User
+
+AnnouncementRepository --> GetAnnouncementsUseCase
+deactivate AnnouncementRepository
+
+GetAnnouncementsUseCase --> HomeViewModel
+deactivate GetAnnouncementsUseCase
+
+HomeViewModel -> HomeScreen: display
+
+@enduml

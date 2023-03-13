@@ -1,0 +1,79 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User  -> CompetitionFormScreen : CompetitionFormScreen()
+activate CompetitionFormScreen
+
+User -> CompetitionFormScreen: onChange()
+
+CompetitionFormScreen -> CompetitionFormViewModel: setTitle()
+activate CompetitionFormViewModel
+
+CompetitionFormScreen -> CompetitionFormViewModel: setDescription()
+
+CompetitionFormScreen -> CompetitionFormViewModel: setPoster()
+
+User -> CompetitionFormScreen: onClick()
+deactivate User
+
+CompetitionFormScreen -> CompetitionFormViewModel: publish()
+
+CompetitionFormViewModel -> PublishCompetitionUseCase: invoke()
+activate PublishCompetitionUseCase
+
+PublishCompetitionUseCase -> PublishCompetitionUseCase: validate()
+activate PublishCompetitionUseCase
+deactivate PublishCompetitionUseCase
+
+alt validation success
+    PublishCompetitionUseCase -> CompetitionRepository: save()
+    activate CompetitionRepository
+
+    alt network call success
+        CompetitionRepository -> CompetitionRemoteDataSource: save()
+        activate CompetitionRemoteDataSource
+
+        CompetitionRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> CompetitionDTO: << create >>
+        activate CompetitionDTO
+        CompetitionDTO --> HttpClient
+        deactivate CompetitionDTO
+
+        HttpClient --> CompetitionRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        CompetitionRemoteDataSource --> CompetitionRepository: response from server
+        deactivate CompetitionRemoteDataSource
+
+        CompetitionRepository -> CompetitionLocalDataSource: save()
+        activate CompetitionLocalDataSource
+
+        CompetitionLocalDataSource -> Database
+        activate Database
+        deactivate Database
+        deactivate CompetitionLocalDataSource
+    else failure
+        CompetitionRepository --> PublishCompetitionUseCase: exception
+        deactivate CompetitionRepository
+
+        PublishCompetitionUseCase --> CompetitionFormViewModel: exception
+
+        CompetitionFormViewModel -> CompetitionFormScreen: showSnackbar()
+    end
+else failure
+    PublishCompetitionUseCase --> CompetitionFormViewModel: exception
+    deactivate PublishCompetitionUseCase
+
+    CompetitionFormViewModel -> CompetitionFormScreen: showSnackbar()
+end
+@enduml

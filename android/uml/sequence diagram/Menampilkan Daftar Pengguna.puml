@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+autonumber
+
+actor User as u1
+u1 -> UserDetailScreen: UserDetailScreen()
+activate UserDetailScreen
+
+UserDetailScreen -> UserDetailViewModel: uiState
+activate UserDetailViewModel
+
+UserDetailViewModel -> GetUsersUseCase: invoke()
+activate GetUsersUseCase
+
+GetUsersUseCase -> UserRepository: getUsers()
+activate UserRepository
+
+alt found
+    UserRepository -> UserLocalDataSource: getUsers
+    activate UserLocalDataSource
+
+    UserLocalDataSource -> Database
+    activate Database
+
+    Database -> UserEntity: << create >>
+    activate UserEntity
+
+    UserEntity --> Database
+    deactivate UserEntity
+
+    Database --> UserLocalDataSource
+    deactivate Database
+
+    UserLocalDataSource --> UserRepository
+    deactivate UserLocalDataSource
+else not found
+    UserRepository -> UserRemoteDataSource: getUsers()
+    activate UserRemoteDataSource
+
+    UserRemoteDataSource -> HttpClient: get()
+    activate HttpClient
+
+    HttpClient -> UserResponse: << create >>
+    activate UserResponse
+
+    UserResponse --> HttpClient
+    deactivate UserResponse
+
+    HttpClient --> UserRemoteDataSource: response\nfrom server
+    deactivate HttpClient
+
+    UserRemoteDataSource --> UserRepository
+    deactivate UserRemoteDataSource
+end
+
+UserRepository -> User: << create >>
+activate User
+
+User --> UserRepository
+deactivate User
+
+UserRepository --> GetUsersUseCase
+deactivate UserRepository
+
+GetUsersUseCase --> UserDetailViewModel
+deactivate GetUsersUseCase
+
+UserDetailViewModel -> UserDetailScreen: display
+
+@enduml

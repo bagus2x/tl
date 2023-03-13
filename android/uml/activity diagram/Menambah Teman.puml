@@ -1,0 +1,33 @@
+@startuml
+title Mengirim permintaan pertemanan
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan\nHalaman Home;
+|Pengguna|
+:Menekan Tombol\nDaftar Pengguna;
+|Aplikasi|
+:Menampilkan\nke Halaman Daftar Pengguna;
+|Pengguna|
+:Memilih Pengguna;
+|Aplikasi|
+:Menampilkan\nHalaman Detil Pengguna;
+|Pengguna|
+:Menekan Tombol\nTambah Teman;
+|Aplikasi|
+:Mengirim Data\nke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+else(tidak)
+    :Menampilkan\nNotifikasi Kesalahan;
+endif
+stop
+@enduml

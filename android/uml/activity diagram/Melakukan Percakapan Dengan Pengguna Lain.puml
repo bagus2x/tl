@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam conditionStyle diamond
+|Pengguna|
+skinparam activityFontSize 16
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Tombol Percakapan;
+|Aplikasi|
+fork
+    :Menampilkan Halaman\nDaftar Isi Percakapan Terakhir;
+fork again
+    :Menampilkan Tombol\nTambah dan Pencarian Percakapan;
+end fork
+->\n;
+|Pengguna|
+:Memilih Pengguna;
+|Aplikasi|
+:Menampilkan Detil Percakapan;
+repeat
+    |Pengguna|
+    :Menulis Pesan;
+    :Menekan Tombol Kirim;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid? Tidak) is (tidak)
+->ya;
+note left
+  Melakukan pengecekan
+  apakah pesan dan berkas valid
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Halaman Home;
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

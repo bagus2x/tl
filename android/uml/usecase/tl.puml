@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+actor "Pengguna" as pg
+usecase "Sign Up" as UC1
+usecase "Sign In" as UC2
+usecase "Menyunting Profil Pengguna" as UC3
+usecase "Membuat Pengumuman" as UC4
+usecase "Melihat Informasi Lomba dan Menandai Sebagai Favorit" as UC5
+usecase "Mempublikasikan Informasi Lomba" as UC6
+usecase "Mengajak Bergabung Pengguna Lain ke Dalam Tim" as UC7
+usecase "Merespon Ajakan Bergabung ke Dalam Tim Lomba" as UC8
+usecase "Memberi Testimoni Kepada Pengguna Lain" as UC9
+usecase "Menambahkan Teman" as UC10
+usecase "Melakukan Percakapan Dengan Pengguna Lain" as UC11
+pg --> UC1
+pg --> UC2
+pg --> UC3
+pg --> UC4
+pg --> UC5
+pg --> UC6
+pg --> UC7
+pg --> UC8
+pg --> UC9
+pg --> UC10
+pg --> UC11
+@enduml

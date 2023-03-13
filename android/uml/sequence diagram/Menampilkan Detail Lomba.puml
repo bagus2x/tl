@@ -1,0 +1,71 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+autonumber
+
+actor User
+User -> CompetitionDetailScreen: CompetitionDetailScreen()
+activate CompetitionDetailScreen
+
+CompetitionDetailScreen -> CompetitionDetailViewModel: uiState
+activate CompetitionDetailViewModel
+
+CompetitionDetailViewModel -> GetCompetitionUseCase: invoke()
+activate GetCompetitionUseCase
+
+GetCompetitionUseCase -> CompetitionRepository: getCompetition()
+activate CompetitionRepository
+
+alt found
+    CompetitionRepository -> CompetitionLocalDataSource: getCompetition
+    activate CompetitionLocalDataSource
+
+    CompetitionLocalDataSource -> Database
+    activate Database
+
+    Database -> CompetitionEntity: << create >>
+    activate CompetitionEntity
+
+    CompetitionEntity --> Database
+    deactivate CompetitionEntity
+
+    Database --> CompetitionLocalDataSource
+    deactivate Database
+
+    CompetitionLocalDataSource --> CompetitionRepository
+    deactivate CompetitionLocalDataSource
+else not found
+    CompetitionRepository -> CompetitionRemoteDataSource: getCompetition()
+    activate CompetitionRemoteDataSource
+
+    CompetitionRemoteDataSource -> HttpClient: get()
+    activate HttpClient
+
+    HttpClient -> CompetitionResponse: << create >>
+    activate CompetitionResponse
+
+    CompetitionResponse --> HttpClient
+    deactivate CompetitionResponse
+
+    HttpClient --> CompetitionRemoteDataSource: response\nfrom server
+    deactivate HttpClient
+
+    CompetitionRemoteDataSource --> CompetitionRepository
+    deactivate CompetitionRemoteDataSource
+end
+
+CompetitionRepository -> Competition: << create >>
+activate Competition
+
+Competition --> CompetitionRepository
+deactivate Competition
+
+CompetitionRepository --> GetCompetitionUseCase
+deactivate CompetitionRepository
+
+GetCompetitionUseCase --> CompetitionDetailViewModel
+deactivate GetCompetitionUseCase
+
+CompetitionDetailViewModel -> CompetitionDetailScreen: display
+
+@enduml

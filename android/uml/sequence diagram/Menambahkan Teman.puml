@@ -1,0 +1,109 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 1080
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User  -> ProfileScreen : ProfileScreen()
+activate ProfileScreen
+
+User -> ProfileScreen: onClick()
+deactivate User
+
+ProfileScreen -> ProfileViewModel: friendship()
+activate ProfileViewModel
+
+ProfileViewModel -> FriendUseCase: invoke()
+activate FriendUseCase
+
+activate UserRepository
+FriendUseCase -> UserRepository: getUser()
+activate FriendUseCase
+deactivate FriendUseCase
+
+alt accepted = true
+   FriendUseCase -> UserRepository: acceptFriendship()
+
+   alt network call success
+       UserRepository -> UserRemoteDataSource: acceptFriendship()
+       activate UserRemoteDataSource
+
+       UserRemoteDataSource -> HttpClient: patch()
+       activate HttpClient
+       deactivate HttpClient
+
+       UserRepository -> UserLocalDataSource: save()
+       activate UserLocalDataSource
+
+       UserLocalDataSource -> Database
+       activate Database
+       deactivate Database
+       deactivate UserLocalDataSource
+   else failure
+       UserRepository --> FriendUseCase: exception
+       deactivate UserRepository
+
+       FriendUseCase --> ProfileViewModel: exception
+
+       ProfileViewModel -> ProfileScreen: showSnackbar()
+   end
+else accepted = false OR user.status = "requested" OR user.status = "accepted"
+    FriendUseCase -> UserRepository: cancelFriendship()
+    activate UserRepository
+
+    alt network call success
+        UserRepository -> UserRemoteDataSource: cancelFriendship()
+        activate UserRemoteDataSource
+
+        UserRemoteDataSource -> HttpClient: delete()
+        activate HttpClient
+        deactivate HttpClient
+
+        UserRepository -> UserLocalDataSource: save()
+        activate UserLocalDataSource
+
+        UserLocalDataSource -> Database
+        activate Database
+        deactivate Database
+        deactivate UserLocalDataSource
+    else failure
+        UserRepository --> FriendUseCase: exception
+        deactivate UserRepository
+
+        FriendUseCase --> ProfileViewModel: exception
+
+        ProfileViewModel -> ProfileScreen: showSnackbar()
+    end
+else accepted = null
+    FriendUseCase -> UserRepository: requestFriendship()
+    activate UserRepository
+
+    alt network call success
+        UserRepository -> UserRemoteDataSource: requestFriendship()
+        activate UserRemoteDataSource
+
+        UserRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+        deactivate HttpClient
+
+        UserRepository -> UserLocalDataSource: save()
+        activate UserLocalDataSource
+
+        UserLocalDataSource -> Database
+        activate Database
+        deactivate Database
+        deactivate UserLocalDataSource
+    else failure
+        UserRepository --> FriendUseCase: exception
+        deactivate UserRepository
+
+        FriendUseCase --> ProfileViewModel: exception
+
+        ProfileViewModel -> ProfileScreen: showSnackbar()
+    end
+end
+@enduml

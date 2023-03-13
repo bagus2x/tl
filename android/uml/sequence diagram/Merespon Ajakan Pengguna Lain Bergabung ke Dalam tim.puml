@@ -1,0 +1,83 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 1020
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User -> InvitationDetailScreen: InvitationDetailScreen()
+activate InvitationDetailScreen
+
+User -> InvitationDetailScreen: onClick()
+
+InvitationDetailScreen -> InvitationDetailScreen: dialog()
+InvitationDetailScreen -> InvitationDetailScreen: navigate()
+
+InvitationDetailScreen -> ResponseFormScreen: ResponseFormScreen()
+deactivate InvitationDetailScreen
+activate ResponseFormScreen
+
+User -> ResponseFormScreen: onChange()
+
+ResponseFormScreen -> ResponseFormViewModel: setDescription()
+activate ResponseFormViewModel
+
+User -> ResponseFormScreen: onClick()
+deactivate User
+
+ResponseFormScreen -> ResponseFormViewModel: respond()
+
+ResponseFormViewModel -> RespondInvitationUseCase: invoke()
+activate RespondInvitationUseCase
+
+RespondInvitationUseCase -> RespondInvitationUseCase: validate()
+activate RespondInvitationUseCase
+deactivate RespondInvitationUseCase
+
+alt validation success
+    RespondInvitationUseCase -> InvitationRepository: save()
+    activate InvitationRepository
+
+    alt network call success
+        InvitationRepository -> InvitationRemoteDataSource: save()
+        activate InvitationRemoteDataSource
+
+        InvitationRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> InvitationDTO: << create >>
+        activate InvitationDTO
+        InvitationDTO --> HttpClient
+        deactivate InvitationDTO
+
+        HttpClient --> InvitationRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        InvitationRemoteDataSource --> InvitationRepository: response from server
+        deactivate InvitationRemoteDataSource
+
+        InvitationRepository --> RespondInvitationUseCase
+
+        RespondInvitationUseCase --> ResponseFormViewModel
+
+        ResponseFormViewModel --> ResponseFormScreen
+        ResponseFormScreen --> InvitationDetailScreen: showSnackbar()
+    else failure
+        InvitationRepository --> RespondInvitationUseCase: exception
+        deactivate InvitationRepository
+
+        RespondInvitationUseCase --> ResponseFormViewModel: exception
+
+        ResponseFormViewModel -> ResponseFormScreen: showSnackbar()
+    end
+else failure
+    RespondInvitationUseCase --> ResponseFormViewModel: exception
+    deactivate RespondInvitationUseCase
+
+    ResponseFormViewModel -> ResponseFormScreen: showSnackbar()
+end
+@enduml

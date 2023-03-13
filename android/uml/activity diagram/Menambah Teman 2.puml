@@ -1,0 +1,33 @@
+@startuml
+title Merespon permintaan pertemanan
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan\nHalaman Home;
+|Pengguna|
+:Menekan Tomboln\nNotifikasi;
+|Aplikasi|
+:Menampilkann\nDaftar Notifikasi;
+|Pengguna|
+:Memilih Notifikasi;
+|Aplikasi|
+:Menampilkan\nPop Up Dialog;
+|Pengguna|
+:Menekan Tombol\nRespons(Tolak/Terima);
+|Aplikasi|
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+
+skinparam dpi 720
+
+skinparam DefaultFontSize 20
+
+hide footbox
+autonumber
+
+actor User
+User  -> SignUpScreen : SignUpScreen()
+
+activate User
+
+activate SignUpScreen
+
+SignUpScreen -> SignUpViewModel: setName()
+activate SignUpViewModel
+
+SignUpScreen -> SignUpViewModel: setEmail()
+
+SignUpScreen -> SignUpViewModel: setPassword()
+
+User -> SignUpScreen: onClick()
+deactivate User
+
+SignUpScreen -> SignUpViewModel: signUp()
+
+SignUpViewModel -> SignUpUseCase: invoke()
+activate SignUpUseCase
+
+SignUpUseCase -> SignUpUseCase: validate()
+activate SignUpUseCase
+deactivate SignUpUseCase
+
+alt validation success
+    SignUpUseCase -> AuthRepository: signUp()
+    activate AuthRepository
+
+    alt network call success
+        AuthRepository -> AuthRemoteDataSource: signUp()
+        activate AuthRemoteDataSource
+
+        AuthRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> AuthDTO: << create >>
+        activate AuthDTO
+        AuthDTO --> HttpClient
+        deactivate AuthDTO
+
+        HttpClient --> AuthRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        AuthRemoteDataSource --> AuthRepository: response from server
+        deactivate AuthRemoteDataSource
+
+        AuthRepository -> AuthLocalDataSource: save()
+        activate AuthLocalDataSource
+
+        AuthLocalDataSource -> Database: save()
+        activate Database
+        deactivate Database
+        deactivate AuthLocalDataSource
+    else failure
+        AuthRepository --> SignUpUseCase: exception
+        deactivate AuthRepository
+
+        SignUpUseCase --> SignUpViewModel: exception
+
+        SignUpViewModel -> SignUpScreen: showSnackbar()
+    end
+else failure
+    SignUpUseCase --> SignUpViewModel: exception
+    deactivate SignUpUseCase
+
+    SignUpViewModel -> SignUpScreen: showSnackbar()
+end
+@enduml

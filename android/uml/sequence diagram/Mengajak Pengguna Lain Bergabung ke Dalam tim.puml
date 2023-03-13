@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User  -> InvitationFormScreen : InvitationFormScreen()
+activate InvitationFormScreen
+
+User -> InvitationFormScreen: onChange()
+
+InvitationFormScreen -> InvitationFormViewModel: setDescription()
+activate InvitationFormViewModel
+
+
+InvitationFormScreen -> InvitationFormViewModel: setFile()
+
+User -> InvitationFormScreen: onClick()
+deactivate User
+
+InvitationFormScreen -> InvitationFormViewModel: invite()
+
+InvitationFormViewModel -> CreateInvitationUseCase: invoke()
+activate CreateInvitationUseCase
+
+CreateInvitationUseCase -> CreateInvitationUseCase: validate()
+activate CreateInvitationUseCase
+deactivate CreateInvitationUseCase
+
+alt validation success
+    CreateInvitationUseCase -> InvitationRepository: invite()
+    activate InvitationRepository
+
+    alt network call success
+        InvitationRepository -> InvitationRemoteDataSource: invite()
+        activate InvitationRemoteDataSource
+
+        InvitationRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> InvitationDTO: << create >>
+        activate InvitationDTO
+        InvitationDTO --> HttpClient
+        deactivate InvitationDTO
+
+        HttpClient --> InvitationRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        InvitationRemoteDataSource --> InvitationRepository: response from server
+        deactivate InvitationRemoteDataSource
+
+        InvitationRepository --> CreateInvitationUseCase
+
+        CreateInvitationUseCase --> InvitationFormViewModel
+
+        InvitationFormViewModel -> InvitationFormScreen: showSnackbar()
+    else failure
+        InvitationRepository --> CreateInvitationUseCase: exception
+        deactivate InvitationRepository
+
+        CreateInvitationUseCase --> InvitationFormViewModel: exception
+
+        InvitationFormViewModel -> InvitationFormScreen: showSnackbar()
+    end
+else failure
+    CreateInvitationUseCase --> InvitationFormViewModel: exception
+    deactivate CreateInvitationUseCase
+
+    InvitationFormViewModel -> InvitationFormScreen: showSnackbar()
+end
+@enduml

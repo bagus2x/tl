@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+skinparam dpi 720
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Menu Daftar Lomba;
+|Aplikasi|
+:Menampilkan  Halaman Daftar Lomba;
+|Pengguna|
+:Menekan Tombol Tambah;
+|Aplikasi|
+:Menampilkan Halaman Form Tambah Lomba;
+repeat
+    |Pengguna|
+    :Mengisi Data;
+    :Menekan Tombol Publish;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid?) is (tidak)
+->ya;
+
+note left
+    Melakukan pengecekan
+    apakah judul, deskripsi,
+    kategori, dan penyelenggara
+    tidak kosong. Serta poster tidak
+    lebih dari 2 MB
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses) then (ya)
+    :Menampilkan Notifikasi Berhasil;
+    |Pengguna|
+    :Menyebarkan Informasi Lomba;
+note left
+    Menyebarkan informasi
+    yang telah diunggah
+    ke aplikasi lain
+end note
+else(tidak)
+    |Aplikasi|
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

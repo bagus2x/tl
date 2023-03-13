@@ -1,0 +1,76 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+User  -> ChatDetailScreen : ChatDetailScreen()
+
+activate User
+
+activate ChatDetailScreen
+
+ChatDetailScreen -> ChatDetailViewModel: setDescription()
+activate ChatDetailViewModel
+
+ChatDetailScreen -> ChatDetailViewModel: setFile()
+
+User -> ChatDetailScreen: onClick()
+deactivate User
+
+ChatDetailScreen -> ChatDetailViewModel: send()
+
+ChatDetailViewModel -> SendMessageUseCase: invoke()
+activate SendMessageUseCase
+
+SendMessageUseCase -> SendMessageUseCase: validate()
+activate SendMessageUseCase
+deactivate SendMessageUseCase
+
+alt validation success
+    SendMessageUseCase -> MessageRepository: send()
+    activate MessageRepository
+
+    alt network call success
+        MessageRepository -> MessageRemoteDataSource: send()
+        activate MessageRemoteDataSource
+
+        MessageRemoteDataSource -> WebsocketClient: send()
+        activate WebsocketClient
+
+        WebsocketClient -> MessageDTO: << create >>
+        activate MessageDTO
+        MessageDTO --> WebsocketClient
+        deactivate MessageDTO
+
+        WebsocketClient --> MessageRemoteDataSource: response from server
+
+        deactivate WebsocketClient
+
+        MessageRemoteDataSource --> MessageRepository: response from server
+        deactivate MessageRemoteDataSource
+
+        MessageRepository -> MessageLocalDataSource: save()
+        activate MessageLocalDataSource
+
+        MessageLocalDataSource -> Database: save()
+        activate Database
+        deactivate Database
+        deactivate MessageLocalDataSource
+    else failure
+        MessageRepository --> SendMessageUseCase: exception
+        deactivate MessageRepository
+
+        SendMessageUseCase --> ChatDetailViewModel: exception
+
+        ChatDetailViewModel -> ChatDetailScreen: showSnackbar()
+    end
+else failure
+    SendMessageUseCase --> ChatDetailViewModel: exception
+    deactivate SendMessageUseCase
+
+    ChatDetailViewModel -> ChatDetailScreen: showSnackbar()
+end
+@enduml

@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+skinparam dpi 1080
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Sign In;
+repeat
+    |Pengguna|
+    :Mengisi Data Email dan Password;
+    :Menekan Tombol Masuk;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid?) is (tidak)
+->ya;
+note left
+  Melakukan pengecekan
+  apakah email dan password valid
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Halaman Home;
+    note left
+      Telah terautentikasi
+      dan pengguna
+      dapat sign out
+    end note
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Sign Up;
+repeat
+    |Pengguna|
+    :Mengisi Data Nama, Email dan Password;
+    :Menekan Tombol Daftar;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid? tidak) is (tidak)
+->ya;
+note left
+  Melakukan pengecekan
+  apakah email dan password valid
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if (sukses) then (ya)
+    repeat
+        :Menampilkan Halaman Verifikasi Email;
+        |Pengguna|
+        :Mengisi Kode Verifikasi;
+        :Menekan Tombol Submit;
+        |Aplikasi|
+        :Mengirim Ke Web Service;
+        |Web Service|
+        :Menerima Data;
+        :Mengirim Respons;
+        |Aplikasi|
+    repeat while (email terverifikasi? Tidak) is (tidak)
+    ->ya;
+    :Menampilkan Halaman Home;
+else (tidak)
+    :Menampilkan Pesan Kesalahan;
+endif
+stop
+@enduml

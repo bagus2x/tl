@@ -1,0 +1,56 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+skinparam dpi 720
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Tombol Profil;
+|Aplikasi|
+:Menampilkan ke Halaman Profil;
+|Pengguna|
+:Menekan Tombol Menu Vertikal;
+|Aplikasi|
+:menampilkan Menu Dialog;
+|Pengguna|
+:Memilih Menu Edit Profil;
+|Aplikasi|
+:Navigasi ke Halaman Edit Profil;
+repeat
+    |Pengguna|
+    :Mengisi Data;
+    note right
+        Mengubah data seperti
+        nama, bio, status ketersedian
+        mengikuti lomba, fakultas,
+        dan lain-lain
+    end note
+    :Menekan Tombol Simpan;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid?) is (tidak)
+->ya;
+note left
+  Melakukan pengecekan
+  apakah nama dan foto
+  tidak kosong. Serta foto tidak
+  lebih dari 2 MB
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Notifikasi Berhasil;
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

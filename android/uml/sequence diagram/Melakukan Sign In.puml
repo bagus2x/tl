@@ -1,0 +1,78 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+
+skinparam DefaultFontSize 20
+
+hide footbox
+autonumber
+
+actor User
+User  -> SignInScreen : SignInScreen()
+
+activate User
+
+activate SignInScreen
+
+SignInScreen -> SignInViewModel: setEmail()
+activate SignInViewModel
+
+SignInScreen -> SignInViewModel: setPassword()
+
+User -> SignInScreen: onClick()
+deactivate User
+
+SignInScreen -> SignInViewModel: signIn()
+
+SignInViewModel -> SignInUseCase: invoke()
+activate SignInUseCase
+
+SignInUseCase -> SignInUseCase: validate()
+activate SignInUseCase
+deactivate SignInUseCase
+
+alt validation success
+    SignInUseCase -> AuthRepository: signIn()
+    activate AuthRepository
+
+    alt network call success
+        AuthRepository -> AuthRemoteDataSource: signIn()
+        activate AuthRemoteDataSource
+
+        AuthRemoteDataSource -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> AuthDTO: << create >>
+        activate AuthDTO
+        AuthDTO --> HttpClient
+        deactivate AuthDTO
+
+        HttpClient --> AuthRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        AuthRemoteDataSource --> AuthRepository: response from server
+        deactivate AuthRemoteDataSource
+
+        AuthRepository -> AuthLocalDataSource: save()
+        activate AuthLocalDataSource
+
+        AuthLocalDataSource -> Database: save()
+        activate Database
+        deactivate Database
+        deactivate AuthLocalDataSource
+    else failure
+        AuthRepository --> SignInUseCase: exception
+        deactivate AuthRepository
+
+        SignInUseCase --> SignInViewModel: exception
+
+        SignInViewModel -> SignInScreen: showSnackbar()
+    end
+else failure
+    SignInUseCase --> SignInViewModel: exception
+    deactivate SignInUseCase
+
+    SignInViewModel -> SignInScreen: showSnackbar()
+end
+@enduml

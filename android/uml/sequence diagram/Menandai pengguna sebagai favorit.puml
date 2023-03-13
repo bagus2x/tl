@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+hide footbox
+skinparam DefaultFontSize 24
+skinparam dpi 720
+
+actor User
+activate User
+User  -> UserDetailScreen : UserDetailScreen()
+activate UserDetailScreen
+
+User -> UserDetailScreen: onClick()
+deactivate User
+
+UserDetailScreen -> UserDetailViewModel: favorite()
+activate UserDetailViewModel
+
+UserDetailViewModel -> FavUserUseCase: invoke()
+activate FavUserUseCase
+
+FavUserUseCase -> UserRepository: favorite()
+activate UserRepository
+
+alt network call success
+    UserRepository -> UserRemoteDataSource: favorite()
+    activate UserRemoteDataSource
+
+    UserRemoteDataSource -> HttpClient: patch()
+    activate HttpClient
+
+    HttpClient -> UserDTO: << create >>
+    activate UserDTO
+    UserDTO --> HttpClient
+    deactivate UserDTO
+
+    HttpClient --> UserRemoteDataSource: response from server
+
+    deactivate HttpClient
+
+    UserRemoteDataSource --> UserRepository: response from server
+    deactivate UserRemoteDataSource
+
+    UserRepository -> UserLocalDataSource: save()
+    activate UserLocalDataSource
+
+    UserLocalDataSource -> Database: save()
+    activate Database
+    deactivate Database
+    deactivate UserLocalDataSource
+else failure
+    UserRepository --> FavUserUseCase: exception
+    deactivate UserRepository
+
+    FavUserUseCase --> UserDetailViewModel: exception
+
+    UserDetailViewModel -> UserDetailScreen: showSnackbar()
+end
+@enduml

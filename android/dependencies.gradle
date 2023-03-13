@@ -1,0 +1,27 @@
+ext.constants = [
+        tl_base_url   : 'http://192.168.1.109:8080',
+        tl_base_url_ws: 'ws://192.168.1.109:8080'
+]
+
+ext.versions = [
+        coil                    : '2.2.2',
+        compose_compiler        : '1.3.2',
+        compose_ui              : '1.3.2',
+        datastore               : '1.0.0',
+        date_time_picker        : '0.9.0',
+        firebase_cloud_messaging: '23.1.0',
+        hilt                    : '2.42',
+        hilt_compose_nav        : '1.0.0',
+        jwt_decode              : '2.0.1',
+        kotlin                  : '1.7.20',
+        ktor                    : '2.1.1',
+        lottie                  : '5.2.0',
+        leakcanary              : '2.9.1',
+        logback_classic         : '1.2.3',
+        material                : '1.3.1',
+        navigation              : '2.6.0-alpha04',
+        pager                   : '0.26.5-rc',
+        room                    : '2.4.3',
+        swiperefresh            : '0.26.5-rc',
+        timber                  : '5.0.1'
+]

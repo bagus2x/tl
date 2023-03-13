@@ -1,0 +1,157 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+left to right direction
+skinparam ranksep 100
+skinparam dpi 720
+package presentation {
+    package notification {
+        class NotificationScreen {
+            {static} +NotificationScreen()
+        }
+        class NotificationViewModel {
+            -getNotificationUseCase: GetNotificationUseCase
+            +snackbar: StateFlow<String>
+            +notifications: List<Notification>
+        }
+        NotificationScreen --> NotificationViewModel
+    }
+    package testimony {
+        class TestimonyFormScreen {
+            {static} +TestimonyFormScreen()
+        }
+        class TestimonyFormViewModel {
+            -addTestimonyUseCase: AddTestimonyUseCase
+            +rating: StateFlow<Float>
+            +description: StateFlow<String>
+            +rating: StateFlow<Float>
+            +snackbar: StateFlow<String>
+            +setRating()
+            +setDescription()
+            +send()
+        }
+        TestimonyFormScreen --> TestimonyFormViewModel
+    }
+    package invitation {
+        package form {
+            class InvitationFormScreen {
+                {static} +InvitationFormScreen()
+            }
+            class InvitationFormViewModel {
+                -createInvitationUseCase: CreateInvitationUseCase
+                +description: StateFlow<String>
+                +file: StateFlow<File>
+                +snackbar: StateFlow<String>
+                +setFile()
+                +setDescription()
+                +invite()
+            }
+            class ResponseFormScreen {
+                {static} +ResponseFormScreen()
+            }
+            class ResponseFormViewModel {
+                -respondInvitationUseCase: RespondInvitationUseCase
+                +description: StateFlow<String>
+                +snackbar: StateFlow<String>
+                +setDescription()
+                +respond()
+            }
+        }
+        package detail {
+            class InvitationDetailScreen {
+                {static} +InvitationFormScreen()
+            }
+            class InvitationDetailViewModel {
+                -getInvitationUseCase: GetInvitationUseCase
+            }
+            class ResponseDetailScreen {
+                {static} +ResponseDetailScreen()
+            }
+            class ResponseDetailViewModel {
+                -getInvitationUseCase: GetInvitationUseCase
+            }
+        }
+        InvitationFormScreen --> InvitationFormViewModel
+        ResponseFormScreen --> ResponseFormViewModel
+        InvitationDetailScreen --> InvitationDetailViewModel
+        ResponseDetailScreen --> ResponseDetailViewModel
+    }
+    package announcement {
+        package form as announcement_add {
+            class AnnouncementFormScreen {
+                {static} +AnnouncementFormScreen()
+            }
+            class AnnouncementFormViewModel {
+                -addAnnouncementUseCase: AddAnnouncementUseCase
+                +loading: StateFlow<Boolean>
+                +description: StateFlow<String>
+                +file: StateFlow<String>
+                +snackbar: StateFlow<String>
+                +setDescription()
+                +setFile()
+                +post()
+            }
+            AnnouncementFormScreen --> AnnouncementFormViewModel
+        }
+        package list as announcement_list {
+            class AnnouncementListScreen {
+                {static} +AnnouncementListScreen()
+            }
+            class AnnouncementListViewModel {
+                -getAnnouncementsUseCase: GetAnnouncementsUseCase
+                +snackbar: StateFlow<String>
+                +announcements: StateFlow<List<Announcement>>
+            }
+            AnnouncementListScreen --> AnnouncementListViewModel
+        }
+        package detail as announcement_detail {
+            class AnnouncementDetailScreen {
+                {static} +AnnouncementDetailScreen()
+            }
+            class AnnouncementDetailViewModel {
+                -getAnnouncementUseCase: GetAnnouncementsUseCase
+                +snackbar: StateFlow<String>
+                +announcement: StateFlow<Announcement>
+            }
+            AnnouncementDetailScreen --> AnnouncementDetailViewModel
+        }
+    }
+}
+
+
+package domain {
+    package usecase {
+
+        class AddAnnouncementUseCase {
+            +invoke()
+        }
+        class GetAnnouncementsUseCase {
+            +invoke()
+        }
+        class GetInvitationUseCase {
+            +invoke()
+        }
+        class GetNotificationUseCase {
+            +invoke()
+        }
+        class AddTestimonyUseCase {
+            +invoke()
+        }
+        class CreateInvitationUseCase {
+            +invoke()
+        }
+        class RespondInvitationUseCase {
+            +invoke()
+        }
+
+        AnnouncementFormViewModel *--> AddAnnouncementUseCase
+        NotificationViewModel *--> GetNotificationUseCase
+        TestimonyFormViewModel *--> AddTestimonyUseCase
+        InvitationFormViewModel *--> CreateInvitationUseCase
+        ResponseFormViewModel *--> RespondInvitationUseCase
+        InvitationDetailViewModel *--> GetInvitationUseCase
+        ResponseDetailViewModel *--> GetInvitationUseCase
+        AnnouncementListViewModel *--> GetAnnouncementsUseCase
+    }
+}
+@enduml

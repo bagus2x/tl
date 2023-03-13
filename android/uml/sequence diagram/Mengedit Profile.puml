@@ -1,0 +1,79 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 720
+skinparam DefaultFontSize 24
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User  -> EditProfileScreen : EditProfileScreen()
+activate EditProfileScreen
+
+User -> EditProfileScreen: onChange()
+
+EditProfileScreen -> EditProfileViewModel: setName()
+activate EditProfileViewModel
+
+EditProfileScreen -> EditProfileViewModel: setPhoto()
+
+EditProfileScreen -> EditProfileViewModel: setBio()
+
+User -> EditProfileScreen: onClick()
+deactivate User
+
+EditProfileScreen -> EditProfileViewModel: update()
+
+EditProfileViewModel -> EditProfileUseCase: invoke()
+activate EditProfileUseCase
+
+EditProfileUseCase -> EditProfileUseCase: validate()
+activate EditProfileUseCase
+deactivate EditProfileUseCase
+
+alt validation success
+    EditProfileUseCase -> UserRepository: save()
+    activate UserRepository
+
+    alt network call success
+        UserRepository -> UserRemoteDataSource: save()
+        activate UserRemoteDataSource
+
+        UserRemoteDataSource -> HttpClient: patch()
+        activate HttpClient
+
+        HttpClient -> UserDTO: << create >>
+        activate UserDTO
+        UserDTO --> HttpClient
+        deactivate UserDTO
+
+        HttpClient --> UserRemoteDataSource: response from server
+
+        deactivate HttpClient
+
+        UserRemoteDataSource --> UserRepository: response from server
+        deactivate UserRemoteDataSource
+
+        UserRepository -> UserLocalDataSource: save()
+        activate UserLocalDataSource
+
+        UserLocalDataSource -> Database
+        activate Database
+        deactivate Database
+        deactivate UserLocalDataSource
+    else failure
+        UserRepository --> EditProfileUseCase: exception
+        deactivate UserRepository
+
+        EditProfileUseCase --> EditProfileViewModel: exception
+
+        EditProfileViewModel -> EditProfileScreen: showSnackbar()
+    end
+else failure
+    EditProfileUseCase --> EditProfileViewModel: exception
+    deactivate EditProfileUseCase
+
+    EditProfileViewModel -> EditProfileScreen: showSnackbar()
+end
+@enduml

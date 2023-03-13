@@ -1,0 +1,85 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam dpi 1080
+skinparam DefaultFontSize 32
+
+hide footbox
+autonumber
+
+actor User
+activate User
+
+User -> "Announcement\nFormScreen": Announcement\nFormScreen()
+activate "Announcement\nFormScreen"
+
+User -> "Announcement\nFormScreen": onChange()
+
+"Announcement\nFormScreen" -> "Announcement\nFormViewModel": setDescription()
+activate "Announcement\nFormViewModel"
+
+"Announcement\nFormScreen" -> "Announcement\nFormViewModel": setFile()
+
+User -> "Announcement\nFormScreen": onClick()
+deactivate User
+
+"Announcement\nFormScreen" -> "Announcement\nFormViewModel": post()
+
+"Announcement\nFormViewModel" -> "Announcement\nFormViewModel": loading = true
+activate "Announcement\nFormViewModel"
+deactivate "Announcement\nFormViewModel"
+
+"Announcement\nFormViewModel" -> "AddAnnouncement\nUseCase": invoke()
+activate "AddAnnouncement\nUseCase"
+
+"AddAnnouncement\nUseCase" -> "AddAnnouncement\nUseCase": validate()
+activate "AddAnnouncement\nUseCase"
+deactivate "AddAnnouncement\nUseCase"
+
+alt validation success
+    "AddAnnouncement\nUseCase" -> "Announcement\nRepository": save()
+    activate "Announcement\nRepository"
+
+    alt network call success
+        "Announcement\nRepository" -> "Announcement\nRemoteDataSource": save()
+        activate "Announcement\nRemoteDataSource"
+
+        "Announcement\nRemoteDataSource" -> HttpClient: post()
+        activate HttpClient
+
+        HttpClient -> "Announcement\nDTO": << create >>
+        activate "Announcement\nDTO"
+        "Announcement\nDTO" --> HttpClient
+        deactivate "Announcement\nDTO"
+
+        HttpClient --> "Announcement\nRemoteDataSource": response from server
+
+        deactivate HttpClient
+
+        "Announcement\nRemoteDataSource" --> "Announcement\nRepository": response from server
+        deactivate "Announcement\nRemoteDataSource"
+
+        "Announcement\nRepository" -> "Announcement\nLocalDataSource": save()
+        activate "Announcement\nLocalDataSource"
+
+        "Announcement\nLocalDataSource" -> Database
+        activate Database
+        deactivate Database
+        deactivate "Announcement\nLocalDataSource"
+    else network failure
+        "Announcement\nRepository" --> "AddAnnouncement\nUseCase": exception
+        deactivate "Announcement\nRepository"
+
+        "AddAnnouncement\nUseCase" --> "Announcement\nFormViewModel": exception
+
+        "Announcement\nFormViewModel" -> "Announcement\nFormScreen": showSnackbar()
+    end
+else validation failed
+    "AddAnnouncement\nUseCase" --> "Announcement\nFormViewModel": exception
+    deactivate "AddAnnouncement\nUseCase"
+
+    "Announcement\nFormViewModel" -> "Announcement\nFormScreen": showSnackbar()
+end
+    "Announcement\nFormViewModel" -> "Announcement\nFormViewModel": loading = false
+    activate "Announcement\nFormViewModel"
+    deactivate "Announcement\nFormViewModel"
+@enduml

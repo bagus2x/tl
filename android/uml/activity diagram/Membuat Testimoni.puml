@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Tombol Daftar Pengguna;
+|Aplikasi|
+:Menampilkan  Halaman Daftar Pengguna;
+|Pengguna|
+:Memilih Pengguna;
+|Aplikasi|
+:Menampilkan Halaman Detil Pengguna;
+|Pengguna|
+:Menekan Tombol Testimoni;
+|Aplikasi|
+:Menampilkan ke Halaman Form Testimoni;
+repeat
+    |Pengguna|
+    :Mengisi Data;
+    :Menekan Tombol Post;
+    |Aplikasi|
+    :Validasi;
+repeat while (data valid?) is (tidak)
+->ya;
+
+note left
+  Melakukan pengecekan
+  apakah pesan tidak kosong.
+end note
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Notifikasi Berhasil;
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

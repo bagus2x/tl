@@ -1,0 +1,8 @@
+FUNCTION invoke(description, file)
+    IF description.length < 1 OR description.length > 500 THEN
+		THROW ERROR
+
+	IF file != NULL AND file.size > 2MB THEN
+		THROW ERROR
+
+	announcementRepository.save(description, file)

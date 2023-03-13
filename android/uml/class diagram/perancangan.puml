@@ -1,0 +1,13 @@
+@startuml
+skinparam dpi 720
+left to right direction
+card "Perancangan Sistem" as Perancangan
+card "Activity Diagram"
+card "Sequence Diagram"
+card "Class Diagram"
+card "Basis Data"
+Perancangan --> "Activity Diagram"
+Perancangan --> "Sequence Diagram"
+Perancangan --> "Class Diagram"
+Perancangan --> "Basis Data"
+@enduml

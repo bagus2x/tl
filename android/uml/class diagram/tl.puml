@@ -1,0 +1,85 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam dpi 720
+skinparam classAttributeIconSize 0
+skinparam classFontSize 32
+<style>
+    title {
+        FontSize 32
+    }
+</style>
+package data {
+
+    package remote {
+        class AnnouncementRemoteDataSource {
+            +client: HttpClient
+            +save()
+            +getAnnouncements()
+        }
+
+    }
+
+    package local {
+        class AnnouncementLocalDataSource {
+            +save()
+            +getAnnouncements()
+            +getAnnouncement()
+        }
+    }
+
+    class AnnouncementRepositoryImpl {
+        +remoteDataSource: AnnouncementRemoteDataSource
+        +localDataSource: AnnouncementLocalDataSource
+        +dispatcher: CoroutineDispatcher
+    }
+    AnnouncementRepositoryImpl o--> AnnouncementRemoteDataSource
+    AnnouncementRepositoryImpl o--> AnnouncementLocalDataSource
+}
+
+package domain {
+    package models {
+        class Announcement {
+            +id: Long
+            +authorId: Long
+            +description: String
+            +file: String?
+            +createdAt: Date
+        }
+    }
+    package repository {
+        interface AnnouncementRepository {
+            +save()
+            +getAnnouncements():  Flow<List<Announcement>>
+        }
+        AnnouncementRepository ..> Announcement
+    }
+    package usecase {
+'        Announcement Use Case
+        class AddAnnouncementUseCase {
+            +announcementRepository: AnnouncementRepository
+            +invoke()
+        }
+        AddAnnouncementUseCase o--> AnnouncementRepository
+    }
+}
+
+class AnnouncementRepositoryImpl implements AnnouncementRepository
+
+package presentation {
+    class AnnouncementFormScreen {
+        {static} +AnnouncementFormScreen()
+    }
+    class AnnouncementFormViewModel {
+        +loading: Boolean
+        +setTitle()
+        +setDescription()
+        +setPoster()
+        +publish()
+    }
+    AnnouncementFormScreen --> AnnouncementFormViewModel
+}
+
+AnnouncementFormViewModel *--> AddAnnouncementUseCase
+
+@enduml

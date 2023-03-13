@@ -1,0 +1,196 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+left to right direction
+skinparam ranksep 200
+skinparam dpi 1020
+package presentation {
+    package user {
+        package list {
+            class UserListScreen {
+                {static} +UserListScreen()
+            }
+            class UserListViewModel {
+                -getUsersUseCase: GetUsersUseCase
+                +users: StateFlow<List<User>>
+                +snackbar: StateFlow<String>
+            }
+            UserListScreen --> UserListViewModel
+        }
+        package detail {
+            class ProfileScreen {
+                {static} +ProfileScreen()
+            }
+            class ProfileViewModel {
+                -getUserUseCase: GetUsersUseCase
+                -signOutUseCase: SignOutUseCase
+                -friendUseCase: FriendUseCase
+                +user: StateFlow<User>
+                +snackbar: StateFlow<String>
+                +signOut()
+                +friendship()
+            }
+            ProfileScreen --> ProfileViewModel
+        }
+    }
+    package auth {
+        package signin {
+            class SignInScreen {
+                {static} +SignInScreen()
+            }
+            class SignInViewModel {
+                +email: StateFlow<String>
+                +password: StateFlow<String>
+                +loading: StateFlow<Boolean>
+                +snackbar: StateFlow<String>
+                +setEmail()
+                +setPassword()
+                +signIn()
+            }
+            SignInScreen --> SignInViewModel
+        }
+        package signup {
+            class SignUpScreen {
+                {static} +SignUpScreen()
+            }
+            class SignUpViewModel {
+                -signUpUseCase: SignUpUseCase
+                +name: StateFlow<String>
+                +email: StateFlow<String>
+                +password: StateFlow<String>
+                +loading: StateFlow<Boolean>
+                +snackbar: StateFlow<String>
+                +setName()
+                +setPassword()
+                +signUp()
+                +verify()
+            }
+            SignUpScreen --> SignUpViewModel
+        }
+    }
+
+    package competition {
+        package form {
+            class CompetitionFormScreen {
+                {static} +CompetitionFormScreen()
+            }
+            class CompetitionFormViewModel {
+                -publishCompetitionUseCase: PublishCompetitionUseCase
+                +title: StateFlow<String>
+                +description: StateFlow<String>
+                +poster: StateFlow<File>
+                +loading: StateFlow<Boolean>
+                +snackbar: StateFlow<String>
+                +setTitle()
+                +setDescription()
+                +setPoster()
+                +publish()
+            }
+            CompetitionFormScreen --> CompetitionFormViewModel
+        }
+        package list as competition_list {
+            class CompetitionListScreen {
+                {static} +CompetitionListScreen()
+            }
+            class CompetitionListViewModel {
+                -getCompetitionsUseCase: GetCompetitionsUseCase
+                +snackbar: StateFlow<String>
+                +competitions: StateFlow<List<Competition>>
+            }
+            CompetitionListScreen --> CompetitionListViewModel
+        }
+        package detail as competition_detail {
+            class CompetitionDetailScreen {
+                {static} +CompetitionDetailScreen()
+            }
+            class CompetitionDetailViewModel {
+                -getCompetitionUseCase: GetCompetitionUseCase
+                +loading: StateFlow<Boolean>
+                +competition: StateFlow<Competition>
+            }
+            CompetitionDetailScreen --> CompetitionDetailViewModel
+        }
+    }
+
+    package chat {
+        package list as chat_list {
+            class ChatListScreen {
+                {static} +ChatListScreen()
+            }
+            class ChatListViewModel {
+                -getLastMessagesUseCase: GetLastMessagesUseCase
+                +lastMessages: StateFlow<List<Messages>>
+            }
+            ChatListScreen --> ChatListViewModel
+        }
+        package detail as chat_detail {
+            class ChatDetailScreen {
+                {static} +ChatDetailScreen()
+            }
+            class ChatDetailViewModel {
+                -getMessagesUseCase: GetMessagesUseCase
+                +loading: StateFlow<Boolean>
+                +snackbar: StateFlow<String>
+                +messages: StateFlow<List<Messages>>
+                +sendMessage()
+            }
+            ChatDetailScreen --> ChatDetailViewModel
+        }
+    }
+}
+
+package domain {
+    package usecase {
+        class GetUsersUseCase {
+            +invoke()
+        }
+        class GetUserUseCase {
+            +invoke()
+        }
+        class SignInUseCase {
+            +invoke()
+        }
+        class SignOutUseCase {
+            +invoke()
+        }
+        class SignUpUseCase {
+            +invoke()
+        }
+        class SendMessageUseCase {
+            +invoke()
+        }
+        class GetMessagesUseCase {
+            +invoke()
+        }
+        class GetLastMessagesUseCase {
+            +invoke()
+        }
+        class PublishCompetitionUseCase {
+            +invoke()
+        }
+        class GetCompetitionUseCase {
+            +invoke()
+        }
+        class GetCompetitionsUseCase {
+            +invoke()
+        }
+        class FriendUseCase {
+            +invoke()
+        }
+
+        UserListViewModel *--> GetUsersUseCase
+        ProfileViewModel *--> GetUserUseCase
+        ProfileViewModel *--> SignOutUseCase
+        SignInViewModel *--> SignInUseCase
+        SignUpViewModel *--> SignUpUseCase
+        CompetitionFormViewModel *--> PublishCompetitionUseCase
+        CompetitionDetailViewModel *--> GetCompetitionUseCase
+        CompetitionListViewModel *--> GetCompetitionsUseCase
+        ChatListViewModel *--> GetLastMessagesUseCase
+        ChatDetailViewModel *--> GetMessagesUseCase
+        ChatDetailViewModel *--> SendMessageUseCase
+        ProfileViewModel *--> FriendUseCase
+    }
+}
+
+@enduml

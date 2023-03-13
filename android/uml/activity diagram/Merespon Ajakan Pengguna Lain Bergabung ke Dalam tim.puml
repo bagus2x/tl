@@ -1,0 +1,46 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam dpi 400
+skinparam conditionStyle diamond
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Tombol Notifikasi;
+|Aplikasi|
+:Menampilkan Halaman Notifikasi;
+|Pengguna|
+:Memilih Notifikasi Tawaran Ajakan;
+|Aplikasi|
+:Menampilkan Dialog Respons;
+:Menampilkan Halaman Tawaran Ajakan;
+repeat
+    |Pengguna|
+    :Menginputkan Data;
+    :Menekan Tombol Kirim;
+    |Aplikasi|
+    :validasi data;
+repeat while (data valid? Tidak) is (tidak)
+->ya;
+note left
+  Melakukan pengecekan
+  apakah pesan tidak kosong.
+  Serta file tidak
+  lebih dari 2 MB
+end note
+:Mengirim Data Respons ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Notifikasi Terkirim;
+else(tidak)
+    :Menampilkan Notifikasi Kesalahan;
+endif
+stop
+@enduml

@@ -1,0 +1,52 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+skinparam defaultTextAlignment center
+skinparam activityFontSize 16
+skinparam conditionStyle diamond
+
+<style>
+activityDiagram {
+  activity {
+    Margin 300
+  }
+}
+</style>
+
+|Pengguna|
+start
+:Membuka Aplikasi;
+|Aplikasi|
+:Menampilkan Halaman Home;
+|Pengguna|
+:Menekan Tombol\nDaftar Isi Pengguna;
+|Aplikasi|
+->\n;
+fork
+    :Menampilkan Halaman\nDaftar Isi Pengguna;
+fork again
+    :Menampilkan Tombol\nPencarian;
+fork again
+    :Menampilkan Tombol\nFilter;
+end fork
+->\n;
+|Pengguna|
+:Memilih Pengguna;
+|Aplikasi|
+:Menampilkan Halaman\nDetil Pengguna;
+|Pengguna|
+:Menekan Tombol Favorit;
+|Aplikasi|
+:Mengirim Data ke Web Service;
+|Web Service|
+:Menerima Data;
+:Mengirim Respons;
+|Aplikasi|
+if(sukses?) then (ya)
+    :Menampilkan Lomba yang
+    Ditandai di Halaman Favorit;
+else(tidak)
+    :Menampilkan Notifikasi
+    Kesalahan;
+endif
+stop
+@enduml
