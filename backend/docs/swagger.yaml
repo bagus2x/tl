@@ -1,0 +1,125 @@
+definitions:
+  domain.AuthResponse:
+    properties:
+      accessToken:
+        type: string
+      refreshToken:
+        type: string
+    type: object
+  domain.Error:
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+    type: object
+  domain.SignInRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  domain.SignUpRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /auth/refresh:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/domain.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Error'
+      summary: Refresh Token
+      tags:
+      - Auth
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Model
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SignInRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ok
+          schema:
+            $ref: '#/definitions/domain.AuthResponse'
+        "404":
+          description: user not found
+          schema:
+            $ref: '#/definitions/domain.Error'
+      summary: Sign In
+      tags:
+      - Auth
+  /auth/signout:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Bearer
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/domain.Error'
+      summary: Sign Out
+      tags:
+      - Auth
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Model
+        in: body
+        name: Request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.SignUpRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: created
+          schema:
+            $ref: '#/definitions/domain.AuthResponse'
+        "409":
+          description: conflict
+          schema:
+            $ref: '#/definitions/domain.Error'
+      summary: Sign Up
+      tags:
+      - Auth
+swagger: "2.0"

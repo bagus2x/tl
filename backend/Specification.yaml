@@ -1,0 +1,1262 @@
+openapi: 3.0.3
+info:
+  title: Teman Lomba
+  description: Teman Lomba
+  version: 1.0.0
+servers:
+  - url: 'http://203.194.112.18:8080/'
+paths:
+  /auth/refresh:
+    get:
+      tags:
+        - Authentication
+      summary: Get updated token
+      parameters:
+        - name: X-Refresh-Token
+          in: header
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/signup:
+    post:
+      tags:
+        - Authentication
+      summary: Sign up
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/signin:
+    post:
+      tags:
+        - Authentication
+      summary: Sign in
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/signout:
+    delete:
+      tags:
+        - Authentication
+      summary: Sign in
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/verification-code:
+    description: Verify user email
+    patch:
+      tags:
+        - Authentication
+      summary: Sign in
+      parameters:
+        - name: Verification-Code
+          in: header
+          required: true
+          schema:
+            type: string
+            example: 1630
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /announcement:
+    post:
+      tags:
+        - Announcement
+      summary: Create new announcement
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /announcement/{announcementId}:
+    get:
+      tags:
+        - Announcement
+      summary: Get announcement by id
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: announcementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /announcements:
+    get:
+      tags:
+        - Announcement
+      summary: Get list of announcements
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Announcement'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /competition:
+    post:
+      tags:
+        - Competition
+      summary: Create new competition
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                poster:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /competition/{competitionId}:
+    get:
+      tags:
+        - Competition
+      summary: Get announcement by id
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Competition'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /competitions:
+    get:
+      tags:
+        - Competition
+      summary: Get list of competitions
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /competitions/favorites/{userId}:
+    get:
+      tags:
+        - Competition
+      summary: Get list of favorites competitions
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /competition/{competitionId}/favorite:
+    summary: Mark competition as favorite
+    post:
+      tags:
+        - Competition
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Unfavorite a user
+      tags:
+        - Competition
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /invitation:
+    post:
+      tags:
+        - Invitation
+      summary: Create new invitation
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                description:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invitation'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /invitation/{invitationId}:
+      get:
+        tags:
+          - Invitation
+        summary: Get invitation by id
+        parameters:
+          - name: Authorization
+            in: header
+            required: true
+            schema:
+              type: string
+              example: Bearer your_access_token
+          - name: invitationId
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          200:
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Invitation'
+          400:
+            description: Invalid operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+      patch:
+        tags:
+          - Invitation
+        summary: Respond a invitation
+        parameters:
+          - name: Authorization
+            in: header
+            required: true
+            schema:
+              type: string
+              example: Bearer your_access_token
+        requestBody:
+          content:
+            multipart/form-data:
+              schema:
+                type: object
+                properties:
+                  description:
+                    type: string
+        responses:
+          200:
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Invitation'
+          400:
+            description: Invalid operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+  /messages/last:
+    get:
+      tags:
+        - Message
+      summary: Get list of last messages
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /messages/{userId}:
+    get:
+      tags:
+        - Message
+      summary: Get list of conversation message with a user
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /message/chat/{userId}:
+    get:
+      tags:
+        - Message
+      summary: Observer new conversation message with WebSocket
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /notifications:
+    get:
+      tags:
+        - Notification
+      summary: Get list of notification
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /notifications/unread:
+    get:
+      tags:
+        - Notification
+      summary: Get number of unread notification
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: number
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /testimony:
+    post:
+      tags:
+        - Testimony
+      summary: Create new testimony
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rating:
+                  type: number
+                  description: Number between 0.0 and 1.0
+                description:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Announcement'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /testimones/{userId}:
+      get:
+        tags:
+          - Testimony
+        summary: Get list of testimonies by userId
+        parameters:
+          - name: Authorization
+            in: header
+            required: true
+            schema:
+              type: string
+              example: Bearer your_access_token
+          - name: userId
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          200:
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Testimony'
+          400:
+            description: Invalid operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+  /user:
+    put:
+      tags:
+        - User
+      summary: Update a user
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photo:
+                  type: string
+                  format: binary
+                name:
+                  type: string
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - User
+      summary: Get authenticated user
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userId}:
+      get:
+        tags:
+          - User
+        summary: Get a user by id
+        parameters:
+          - name: Authorization
+            in: header
+            required: true
+            schema:
+              type: string
+              example: Bearer your_access_token
+          - name: userId
+            in: path
+            required: true
+            schema:
+              type: integer
+        responses:
+          200:
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+          400:
+            description: Invalid operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error'
+  /users:
+    get:
+      tags:
+        - User
+      summary: Get list of users
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Competition'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userId}/favorites:
+    get:
+      tags:
+        - User
+      summary: Get list of favorites users
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userId}/favorite:
+    post:
+      summary: Mark user as favorite
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Unfavorite a user
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: competitionId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userId}/friends:
+    get:
+      tags:
+        - User
+      summary: Get list of friends
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /user/{userId}/friend:
+    post:
+      summary: Request friendship
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Accept friendship request
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete or decline friendship
+      tags:
+        - User
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: Bearer your_access_token
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        400:
+          description: Invalid operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Auth:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          example: your_access_token
+        refreshToken:
+          type: string
+          example: your_refresh_token
+        verified:
+          type: boolean
+          example: true
+    Announcement:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        author:
+          type: object
+          $ref: '#/components/schemas/User'
+        description:
+          type: string
+        file:
+          type: string
+          nullable: true
+          example: "https://www.example.com/image.jpg"
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Competition:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        authorId:
+          type: integer
+          example: 1
+        file:
+          type: string
+          nullable: true
+          example: "https://www.example.com/poster.jpg"
+        title:
+          type: string
+        description:
+          type: string
+        theme:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        deadline:
+          type: integer
+          example: 1673302497869
+        minimumFee:
+          type: integer
+          example: 50000
+        maximumFee:
+          type: integer
+          example: 150000
+        category:
+          type: string
+          enum: [ 'national', 'international' ]
+          example: 'national'
+        organizer:
+          type: string
+          enum: [ 'university', 'company', 'government' ]
+          example: university
+        organizerName:
+          type: string
+        urlLink:
+          type: string
+          example: "https://www.example.com/"
+        favorite:
+          type: boolean
+          example: true
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Invitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        inviterId:
+          type: integer
+          example: 1
+        inviteeId:
+          type: integer
+          example: 1
+        description:
+          type: string
+        file:
+          type: string
+          nullable: true
+          example: "https://www.example.com/image.jpg"
+        response:
+          type: string
+          enum: [ 'invitation_requested','invitation_accepted', 'invitation_declined' ]
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Message:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        senderId:
+          type: integer
+          example: 1
+        receiverId:
+          type: integer
+          example: 1
+        description:
+          type: string
+        file:
+          type: string
+          nullable: true
+          example: "https://www.example.com/image.jpg"
+        unread:
+          type: boolean
+          example: false
+        totalUnread:
+          type: integer
+          example: 0
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        dataId:
+          type: integer
+          example: 1
+          nullable: true
+        photo:
+          type: string
+          nullable: true
+          example: "https://www.example.com/photo.jpg"
+        title:
+          type: string
+        subtitle1:
+          type: string
+          nullable: true
+        subtitle2:
+          type: string
+          nullable: true
+        description:
+          type: string
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Testimony:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        senderId:
+          type: integer
+          example: 1
+        receiverId:
+          type: integer
+          example: 1
+        description:
+          type: string
+        rating:
+          description: rating between 0.0 and 1.0
+          type: number
+          example: 0.4
+        createdAt:
+          type: integer
+          example: 1673302497869
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+        email:
+          type: string
+          example: bagus@gmail.com
+        photo:
+          type: string
+          nullable: true
+        university:
+          type: string
+          nullable: true
+        faculty:
+          type: string
+          nullable: true
+        department:
+          type: string
+          nullable: true
+        studyProgram:
+          type: string
+          nullable: true
+        stream:
+          type: string
+          nullable: true
+        batch:
+          type: integer
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        age:
+          type: integer
+          nullable: true
+        bio:
+          type: string
+          nullable: true
+        achievements:
+          type: array
+          items:
+            type: string
+        certifications:
+          type: array
+          items:
+            type: string
+        skills:
+          type: array
+          items:
+            type: string
+        invitable:
+          type: boolean
+          example: true
+        location:
+          type: string
+          nullable: true
+        friendshipStatus:
+          type: string
+          enum: [ 'friendship_requested', 'friendship_accepted' ]
+        favorite:
+          type: boolean
+          example: true
+        rating:
+          description: rating between 0.0 and 1.0
+          type: number
+          example: 0.4
+        votes:
+          type: number
+        friends:
+          type: number
+        updatedAt:
+          type: integer
+          example: 1673302497869
+        createdAt:
+          type: integer
+          example: 1673302497869
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          description: Codes between 0 and 500
