@@ -147,6 +147,8 @@ dependencies {
     // Timber
     implementation "com.jakewharton.timber:timber:$versions.timber"
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutine")
+
     // Test
     testImplementation 'com.google.dagger:hilt-android-testing:2.44'
     kaptTest 'com.google.dagger:hilt-android-compiler:2.44'
@@ -160,4 +162,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$versions.compose_ui"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$versions.compose_ui"
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$versions.leakcanary"
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutine"
+    testImplementation 'app.cash.turbine:turbine:0.12.3'
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.1.0"
 }

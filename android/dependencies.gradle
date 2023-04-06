@@ -23,5 +23,6 @@ ext.versions = [
         pager                   : '0.26.5-rc',
         room                    : '2.4.3',
         swiperefresh            : '0.26.5-rc',
-        timber                  : '5.0.1'
+        timber                  : '5.0.1',
+        coroutine               : '1.6.4'
 ]
