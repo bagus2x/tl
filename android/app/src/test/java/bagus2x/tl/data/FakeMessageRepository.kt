@@ -35,7 +35,7 @@ class FakeMessageRepository : MessageRepository {
             id = Messages.last().id + 1,
             receiver = users[1],
             sender = users[0],
-            description = LoremIpsum(50).values.joinToString(" "),
+            description = description,
             createdAt = System.currentTimeMillis(),
             unread = false,
             totalUnread = 0,

@@ -1,6 +1,7 @@
 package bagus2x.tl.presentation.chat.contact.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import bagus2x.tl.presentation.common.Tag
@@ -47,10 +49,13 @@ fun UserInput(
                     Text(text = "Message here...")
                 },
             )
+            val localUriHandler = LocalUriHandler.current
             Icon(
                 imageVector = Icons.Outlined.Add,
                 contentDescription = null,
-                modifier = Modifier.padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
+                modifier = Modifier
+                    .padding(top = 8.dp, end = 8.dp, bottom = 8.dp)
+                    .clickable { localUriHandler.openUri("https://www.file.io/") }
             )
         }
         Surface(

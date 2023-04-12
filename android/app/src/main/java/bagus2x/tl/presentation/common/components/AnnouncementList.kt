@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import bagus2x.tl.R
 import bagus2x.tl.domain.model.Announcement
+import bagus2x.tl.presentation.common.LocalAuthUser
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -39,6 +40,7 @@ fun AnnouncementList(
             )
         }
     } else {
+        val authUser = LocalAuthUser.current
         LazyColumn(modifier) {
             items(
                 items = announcements,
@@ -57,7 +59,11 @@ fun AnnouncementList(
                     timestamp = announcement.createdAt,
                     description = announcement.description,
                     file = announcement.file,
-                    onClick = { onItemClicked?.invoke(announcement.author.id) }
+                    onClick = {
+                        if (onItemClicked != null && announcement.author.id != authUser?.userId) {
+                            onItemClicked(announcement.author.id)
+                        }
+                    }
                 )
                 Divider()
             }

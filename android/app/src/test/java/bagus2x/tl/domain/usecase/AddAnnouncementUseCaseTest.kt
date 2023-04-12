@@ -24,7 +24,7 @@ class AddAnnouncementUseCaseTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `add announcement throws exception when descriptions is blank`() = runTest {
+    fun `addAnnouncement throws exception when descriptions is blank`() = runTest {
         addAnnouncementUseCase(
             description = "",
             file = null
@@ -32,7 +32,7 @@ class AddAnnouncementUseCaseTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `add announcement throws exception when file is greater than 2mb`() = runTest {
+    fun `addAnnouncement throws exception when file is greater than 2mb`() = runTest {
         val file = mock<File>()
         `when`(file.length()).thenReturn(2 * 1024 * 1024)
         addAnnouncementUseCase(
@@ -42,7 +42,7 @@ class AddAnnouncementUseCaseTest {
     }
 
     @Test
-    fun `add announcement success`() = runTest {
+    fun `addAnnouncement success`() = runTest {
         val file = mock<File>()
         `when`(file.length()).thenReturn(1 * 1024 * 1024)
         addAnnouncementUseCase(

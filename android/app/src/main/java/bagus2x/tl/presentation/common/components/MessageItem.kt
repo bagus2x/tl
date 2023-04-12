@@ -1,6 +1,7 @@
 package bagus2x.tl.presentation.common.components
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -51,11 +52,13 @@ fun MessageItem(
                     )
                 )
         ) {
-            Text(
-                text = description,
-                modifier = Modifier.padding(start = 8.dp, top = 24.dp, end = 16.dp),
-                style = MaterialTheme.typography.body2
-            )
+            SelectionContainer {
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(start = 8.dp, top = 24.dp, end = 16.dp),
+                    style = MaterialTheme.typography.body2
+                )
+            }
             Text(
                 text = createdAt.hoursMinutes,
                 modifier = Modifier

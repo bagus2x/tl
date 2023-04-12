@@ -94,7 +94,8 @@ fun SignUpScreen(
             Text(
                 text = stringResource(R.string.text_sign_in_sign_up),
                 style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colors.primary
             )
             Spacer(modifier = Modifier.height(32.dp))
             TextField(

@@ -3,6 +3,7 @@ package bagus2x.tl.domain.usecase
 import bagus2x.tl.data.FakeMessageRepository
 import bagus2x.tl.domain.repository.MessageRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
@@ -34,6 +35,11 @@ class SendMessageUseCaseTest {
             receiverId = 1,
             description = "this is description",
             file = null
+        )
+        val newMessage = messageRepository.getMessages(1).first().first()
+        assertEquals(
+            "this is description",
+            newMessage.description
         )
     }
 }
