@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import bagus2x.tl.R
 import bagus2x.tl.domain.model.User
-import bagus2x.tl.presentation.chat.contact.component.ContactItem
+import bagus2x.tl.presentation.common.components.ContactItem
 
 @OptIn(ExperimentalLifecycleComposeApi::class)
 @Composable

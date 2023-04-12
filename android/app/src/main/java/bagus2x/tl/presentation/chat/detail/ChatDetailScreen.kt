@@ -20,7 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import bagus2x.tl.domain.model.Message
 import bagus2x.tl.domain.model.User
-import bagus2x.tl.presentation.chat.contact.component.UserInput
+import bagus2x.tl.presentation.common.components.UserInput
 import bagus2x.tl.presentation.common.Utils
 import bagus2x.tl.presentation.common.LocalShowSnackbar
 import bagus2x.tl.presentation.common.components.MessageList

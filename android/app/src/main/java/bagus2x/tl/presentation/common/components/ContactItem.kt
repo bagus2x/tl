@@ -1,4 +1,4 @@
-package bagus2x.tl.presentation.chat.contact.component
+package bagus2x.tl.presentation.common.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

@@ -1,4 +1,4 @@
-package bagus2x.tl.presentation.chat.contact.component
+package bagus2x.tl.presentation.common.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import bagus2x.tl.presentation.common.Tag
-import bagus2x.tl.presentation.common.components.BasicTextField
 
 @Composable
 fun UserInput(
