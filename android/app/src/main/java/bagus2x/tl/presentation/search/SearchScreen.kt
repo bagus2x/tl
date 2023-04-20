@@ -19,7 +19,13 @@ import bagus2x.tl.domain.model.Announcement
 import bagus2x.tl.domain.model.Competition
 import bagus2x.tl.domain.model.Message
 import bagus2x.tl.domain.model.User
-import bagus2x.tl.presentation.common.components.*
+import bagus2x.tl.presentation.common.components.AnnouncementList
+import bagus2x.tl.presentation.common.components.BasicTextField
+import bagus2x.tl.presentation.common.components.CompetitionList
+import bagus2x.tl.presentation.common.components.LastMessageList
+import bagus2x.tl.presentation.common.components.MessageList
+import bagus2x.tl.presentation.common.components.Scaffold
+import bagus2x.tl.presentation.common.components.UserList
 
 @Composable
 fun SearchScreen(
@@ -43,7 +49,9 @@ fun SearchScreen(
         competitions = competitions,
         lastMessages = lastMessages,
         messages = messages,
-        navigateToAnnouncementDetail = {},
+        navigateToInvitationForm = { userId ->
+            navController.navigate("invitation_form/$userId")
+        },
         navigateToUserDetail = { userId ->
             navController.navigate("user_detail/$userId")
         },
@@ -69,7 +77,7 @@ fun SearchScreen(
     competitions: List<Competition>,
     lastMessages: List<Message>,
     messages: List<Message>,
-    navigateToAnnouncementDetail: (Long) -> Unit,
+    navigateToInvitationForm: (Long) -> Unit,
     navigateToUserDetail: (Long) -> Unit,
     navigateToCompetitionDetail: (Long) -> Unit,
     navigateToChatDetail: (Long) -> Unit
@@ -96,7 +104,7 @@ fun SearchScreen(
         if (type == "announcements") {
             AnnouncementList(
                 announcements = announcements,
-                onItemClicked = navigateToAnnouncementDetail,
+                onItemClicked = navigateToInvitationForm,
                 modifier = Modifier.fillMaxSize(),
             )
         }
